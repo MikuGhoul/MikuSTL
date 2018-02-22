@@ -15,7 +15,7 @@ TinyString::TinyString(size_t count, char ch) : data_(new char[count + 1]){
 }
 
 TinyString::TinyString(const char* s) : data_(new char[strlen(s) + 1]) {
-	// strcpy ²Ù×÷°üÀ¨'\0'
+	// strcpy æ“ä½œåŒ…æ‹¬'\0'
 	strcpy(data_, s);
 }
 
