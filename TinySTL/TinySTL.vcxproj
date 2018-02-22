@@ -139,6 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Include\TinyString.cpp" />
+    <ClCompile Include="Include\TinyVector.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\TinyString.h" />
+    <ClInclude Include="Test\testString.hpp" />
+    <ClInclude Include="Test\testVector.hpp" />
+    <ClInclude Include="Include\TinyVector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
