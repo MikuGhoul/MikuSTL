@@ -7,6 +7,7 @@
 int main(int argc, char* argv[]) {
 
 	stringTestCase1();
+	stringTestCase2();
 
 
 	return 0;
