@@ -20,4 +20,17 @@ void stringTestCase2() {
 		<< _Tstr << std::endl;
 }
 
+void stringTestCase3() {
+	TinyString Tstr("TinyString testing 4");
+	TinyString _Tstr("TinyString testing 5");
+	Tstr[2] = 'a';
+	std::cout << Tstr << std::endl
+		<< _Tstr[2] << std::endl;
+}
+void stringTestCase4() {
+	TinyString Tstr("TinyString testing 6");
+	EXPECT_CHAR(Tstr.front(), 'T');
+	EXPECT_CHAR(Tstr.back(), '5');
+	EXPECT_CHAR(Tstr[2], 'q');
+}
 #endif // !TESTSTRING_H__

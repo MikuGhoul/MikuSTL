@@ -2,12 +2,13 @@
 
 #include <cstring>
 #include <iostream>
+#include <cassert>
 
 TinyString::TinyString() : begin_(new char[1]), end_(begin_){
 	*begin_= '\0';
 }
 
-TinyString::TinyString(size_t count, char ch) : begin_(new char[count + 1]), end_(begin_ + count){
+TinyString::TinyString(std::size_t count, char ch) : begin_(new char[count + 1]), end_(begin_ + count){
 	char* t = begin_;
 	while (count--) {
 		*t++ = ch;
@@ -23,6 +24,14 @@ TinyString::TinyString(const char* s) : begin_(new char[strlen(s) + 1]), end_(be
 TinyString& TinyString::operator=(const TinyString& str) {
 	strcpy(begin_, str.begin_);
 	return *this;
+}
+
+char& TinyString::operator[](std::size_t pos) {
+	return begin_[pos];
+}
+
+const char& TinyString::operator[](std::size_t pos) const {
+	return begin_[pos];
 }
 
 char& TinyString::front() {

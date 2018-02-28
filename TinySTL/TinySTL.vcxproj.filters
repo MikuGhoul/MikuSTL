@@ -30,6 +30,9 @@
     <ClCompile Include="Include\TinyVector.cpp">
       <Filter>Implement</Filter>
     </ClCompile>
+    <ClCompile Include="Test\testMacro.h">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\TinyVector.h">
@@ -44,5 +47,8 @@
     <ClInclude Include="Test\testString.hpp">
       <Filter>Test</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

@@ -5,10 +5,13 @@
 class TinyString {
 public:
 	TinyString();
-	TinyString(size_t, char);
+	TinyString(std::size_t, char);
 	TinyString(const char*);
 
 	TinyString& operator=(const TinyString&);
+
+	char& operator[](std::size_t);
+	const char& operator[](std::size_t) const;
 
 	char& front();
 	const char& front() const;
