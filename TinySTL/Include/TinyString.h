@@ -4,12 +4,14 @@
 
 class TinyString {
 public:
+	// Member functions
 	TinyString();
 	TinyString(std::size_t, char);
 	TinyString(const char*);
 
 	TinyString& operator=(const TinyString&);
 
+	// Element access
 	char& operator[](std::size_t);
 	const char& operator[](std::size_t) const;
 
@@ -18,11 +20,24 @@ public:
 	char& back();
 	const char& back() const;
 
+	// Iterators
+	char* begin();
+	const char* begin() const;
+	char* end();
+	const char* end() const;
+
+	// Capacity
+	bool empty() const;
+	std::size_t size() const;
+	std::size_t length() const;
+
+
+	//Non-member functions
 	friend std::ostream& operator<<(std::ostream&, const TinyString&);
 
 private:
-	//char* const data_;
-	char* const begin_;
+	// char* const data_;
+	char* begin_;
 	char* end_;
 };
 

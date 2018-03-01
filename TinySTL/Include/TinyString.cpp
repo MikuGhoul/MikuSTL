@@ -2,8 +2,9 @@
 
 #include <cstring>
 #include <iostream>
-#include <cassert>
 
+
+// Member functions
 TinyString::TinyString() : begin_(new char[1]), end_(begin_){
 	*begin_= '\0';
 }
@@ -26,6 +27,7 @@ TinyString& TinyString::operator=(const TinyString& str) {
 	return *this;
 }
 
+// Element access
 char& TinyString::operator[](std::size_t pos) {
 	return begin_[pos];
 }
@@ -50,6 +52,37 @@ const char& TinyString::back() const {
 	return *(end_ - 1);
 }
 
+// Iterators
+char* TinyString::begin(){
+	return begin_;
+}
+
+const char* TinyString::begin() const {
+	return begin_;
+}
+
+char* TinyString::end() {
+	return end_;
+}
+
+const char* TinyString::end() const {
+	return end_;
+}
+
+// Capacity
+bool TinyString::empty() const {
+	return begin_ == end_;
+}
+
+std::size_t TinyString::size() const {
+	return end_ - begin_;
+}
+
+std::size_t TinyString::length() const {
+	return end_ - begin_;
+}
+
+//Non-member functions
 std::ostream& operator<<(std::ostream& os, const TinyString& str) {
 	os << str.begin_;
 	return os;

@@ -1,9 +1,9 @@
 #include <iostream>
+#include <cassert>
 
-#include "Test/testMacro.h"
 #include "Test/testString.hpp"
 #include "Test/testVector.hpp"
-
+#include "Test/testHeader.hpp"
 
 void testString() {
 	stringTestCase1();
@@ -16,8 +16,6 @@ void testString() {
 int main(int argc, char* argv[]) {
 
 	testString();
-	std::cout << test_pass << "/" << test_count << std::endl 
-		<< test_pass * 100.0 / test_count << "% Passed" << std::endl;
-
-	return main_ret;
+	
+	return 0;
 }

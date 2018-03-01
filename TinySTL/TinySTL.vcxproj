@@ -142,10 +142,10 @@
     <ClCompile Include="Include\TinyString.cpp" />
     <ClCompile Include="Include\TinyVector.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Test\testMacro.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\TinyString.h" />
+    <ClInclude Include="Test\testHeader.hpp" />
     <ClInclude Include="Test\testString.hpp" />
     <ClInclude Include="Test\testVector.hpp" />
     <ClInclude Include="Include\TinyVector.h" />
