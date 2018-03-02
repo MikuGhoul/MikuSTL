@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <iostream>
+#include <cassert>
 
 
 // Member functions
@@ -81,6 +82,31 @@ std::size_t TinyString::size() const {
 std::size_t TinyString::length() const {
 	return end_ - begin_;
 }
+
+// Operations
+void TinyString::clear() {
+	erase(begin_, end_);
+}
+
+TinyString& TinyString::erase(std::size_t index, std::size_t npos) {
+	strcpy(begin_ + index, begin_ + index + npos);
+	end_ -= npos;
+	return *this;
+}
+
+char* TinyString::erase(char* position) {
+	strcpy(position, position + 1);
+	end_ -= 1;
+	return position;
+}
+
+char* TinyString::erase(char* first, char* last) {
+	strcpy(first, last);
+	end_ -= last - first;
+	return first;
+}
+
+
 
 //Non-member functions
 std::ostream& operator<<(std::ostream& os, const TinyString& str) {

@@ -40,4 +40,34 @@ void stringTestCase5() {
 	assert(_Tstr.length() == 0);
 }
 
+void stringTestCase6() {
+	TinyString Tstr("Tiny testing 5");
+	std::string _Tstr("testing 5");
+	Tstr.erase(0, 5);
+	assert(expect_string(Tstr, _Tstr));
+}
+
+void stringTestCase7() {
+	TinyString Tstr("Tiny testing 6");
+	std::string _Tstr("Tiy testing 6");
+	auto p = Tstr.begin() + 2;
+	assert(*(Tstr.erase(p)) == 'y');
+	assert(expect_string(Tstr, _Tstr));
+}
+
+void stringTestCase8() {
+	TinyString Tstr("Tiny testing 7");
+	std::string _Tstr("Titesting 7");
+	auto p = Tstr.begin() + 2;
+	auto q = p + 3;
+	assert(*(Tstr.erase(p, q)) == 't');
+	assert(expect_string(Tstr, _Tstr));	
+}
+
+void stringTestCase9() {
+	TinyString Tstr("Tiny testing 8");
+	Tstr.clear();
+	assert(Tstr.empty());
+}
+
 #endif // !TESTSTRING_H__

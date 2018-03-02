@@ -10,6 +10,10 @@ void testString() {
 	stringTestCase2();
 	stringTestCase3();
 	stringTestCase4();
+	stringTestCase5();
+	stringTestCase6();
+	stringTestCase7();
+	stringTestCase8();
 }
 
 

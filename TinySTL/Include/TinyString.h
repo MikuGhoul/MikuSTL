@@ -31,6 +31,11 @@ public:
 	std::size_t size() const;
 	std::size_t length() const;
 
+	// Operations
+	void clear();
+	TinyString& erase(std::size_t, std::size_t);
+	char* erase(char*);
+	char* erase(char* , char*);
 
 	//Non-member functions
 	friend std::ostream& operator<<(std::ostream&, const TinyString&);
