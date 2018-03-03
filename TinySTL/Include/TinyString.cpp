@@ -106,7 +106,45 @@ char* TinyString::erase(char* first, char* last) {
 	return first;
 }
 
+void TinyString::strTransform(std::size_t index, std::size_t count) {
+	int ind_to_end = end_ - (begin_ + index - 1);
+	char* p = end_;
+	while (ind_to_end--) {
+		*(p + count) = *p;
+		--p;
+	}
+	end_ += count;
+	// p += count;
+}
 
+TinyString& TinyString::insert(std::size_t index, std::size_t count, char ch) {
+	strTransform(index, count);
+
+	char* q = begin_ + index;
+	for (int i = 0; i < count; ++i) {
+		*(q + i) = ch;
+	}
+	return *this;
+}
+
+TinyString& TinyString::insert(std::size_t index, const char* s) {
+	return insert(index, s, strlen(s));
+}
+
+TinyString& TinyString::insert(std::size_t index, const char* s, std::size_t count) {
+	strTransform(index, count);
+
+	strncpy(begin_ + index, s, count);
+	return *this;
+}
+
+TinyString& TinyString::insert(std::size_t index, const TinyString& str) {
+	int count = str.length();
+	strTransform(index, count);
+
+	strncpy(begin_ + index, str.begin(), count);
+	return *this;
+}
 
 //Non-member functions
 std::ostream& operator<<(std::ostream& os, const TinyString& str) {

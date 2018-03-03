@@ -14,6 +14,11 @@ void testString() {
 	stringTestCase6();
 	stringTestCase7();
 	stringTestCase8();
+	stringTestCase9();
+	stringTestCase10();
+	stringTestCase11();
+	stringTestCase12();
+	stringTestCase13();
 }
 
 

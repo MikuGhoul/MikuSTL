@@ -3,6 +3,8 @@
 #include <ostream>
 
 class TinyString {
+private: 
+	void strTransform(std::size_t, std::size_t);
 public:
 	// Member functions
 	TinyString();
@@ -36,6 +38,10 @@ public:
 	TinyString& erase(std::size_t, std::size_t);
 	char* erase(char*);
 	char* erase(char* , char*);
+	TinyString& insert(std::size_t, std::size_t, char);
+	TinyString& insert(std::size_t, const char*);
+	TinyString& insert(std::size_t, const char*, std::size_t);
+	TinyString& insert(std::size_t, const TinyString&);
 
 	//Non-member functions
 	friend std::ostream& operator<<(std::ostream&, const TinyString&);

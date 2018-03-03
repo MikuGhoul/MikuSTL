@@ -70,4 +70,33 @@ void stringTestCase9() {
 	assert(Tstr.empty());
 }
 
+void stringTestCase10() {
+	TinyString Tstr("Tiny testing 9");
+	std::string _Tstr("Tiny wwwtesting 9");
+	Tstr.insert(5, 3, 'w');
+	assert(expect_string(Tstr, _Tstr));
+}
+
+void stringTestCase11() {
+	TinyString Tstr("Tiny testing 10");
+	std::string _Tstr("whatTiny testing 10");
+	Tstr.insert(0, "what");
+	assert(expect_string(Tstr, _Tstr));
+}
+
+void stringTestCase12() {
+	TinyString Tstr("Tiny testing 11");
+	std::string _Tstr("whTiny testing 11");
+	Tstr.insert(0, "what the hell", 2);
+	assert(expect_string(Tstr, _Tstr));
+}
+
+void stringTestCase13() {
+	TinyString Tstr("Tiny testing 12");
+	TinyString _Tstr("what");
+	std::string _Tstr_2("whatTiny testing 12");
+	Tstr.insert(0, _Tstr);
+	assert(expect_string(Tstr, _Tstr_2));
+}
+
 #endif // !TESTSTRING_H__

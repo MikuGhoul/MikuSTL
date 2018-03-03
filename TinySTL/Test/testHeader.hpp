@@ -19,6 +19,7 @@ bool expect_string(TinyString& actual, std::string& expect) {
 		if (*first1 != *first2)
 			return false;
 	}
+	// return true;
 	return first1 == end1 && first2 == end2;
 }
 
