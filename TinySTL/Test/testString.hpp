@@ -14,12 +14,18 @@ void stringTestCase1() {
 
 void stringTestCase2() {
 	TinyString Tstr("TinyString testing 2");
+	const TinyString _Tstr("TinyString testing2");
 	assert(expect_char(Tstr.front(), 'T'));
 	assert(expect_char(Tstr.back(), '2'));
+	assert(expect_char(_Tstr.front(), 'T'));
+	assert(expect_char(_Tstr.back(), '2'));
 }
 
 void stringTestCase3() {
 	TinyString Tstr("TinyString testing 3");
+	const TinyString _Tstr("TingString testing 3");
+	assert(expect_char(Tstr[1], 'i'));
+	assert(expect_char(Tstr[3], 'y'));
 	assert(expect_char(Tstr[1], 'i'));
 	assert(expect_char(Tstr[3], 'y'));
 }

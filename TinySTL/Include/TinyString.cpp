@@ -30,7 +30,8 @@ TinyString& TinyString::operator=(const TinyString& str) {
 
 // Element access
 char& TinyString::operator[](std::size_t pos) {
-	return begin_[pos];
+	return const_cast<char&>(
+		const_cast<const TinyString&>(*this)[pos]);
 }
 
 const char& TinyString::operator[](std::size_t pos) const {
@@ -38,7 +39,8 @@ const char& TinyString::operator[](std::size_t pos) const {
 }
 
 char& TinyString::front() {
-	return begin_[0];
+	return const_cast<char&>(
+		const_cast<const TinyString&>(*this).front());
 }
 
 const char& TinyString::front() const {
@@ -46,7 +48,8 @@ const char& TinyString::front() const {
 }
 
 char& TinyString::back() {
-	return *(end_ - 1);
+	return const_cast<char&>(
+		const_cast<const TinyString&>(*this).back());
 }
 
 const char& TinyString::back() const {
@@ -55,7 +58,8 @@ const char& TinyString::back() const {
 
 // Iterators
 char* TinyString::begin(){
-	return begin_;
+	return const_cast<char*>(
+		const_cast<const TinyString&>(*this).begin());
 }
 
 const char* TinyString::begin() const {
@@ -63,7 +67,8 @@ const char* TinyString::begin() const {
 }
 
 char* TinyString::end() {
-	return end_;
+	return const_cast<char*>(
+		const_cast<const TinyString&>(*this).end());
 }
 
 const char* TinyString::end() const {
