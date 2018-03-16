@@ -1,9 +1,12 @@
 #include <iostream>
 #include <cassert>
 
+
+
 #include "Test/testString.hpp"
 #include "Test/testVector.hpp"
 #include "Test/testHeader.hpp"
+#include "Test/testAlloc.hpp"
 
 void testString() {
 	stringTestCase1();
@@ -21,10 +24,14 @@ void testString() {
 	stringTestCase13();
 }
 
+void testAlloc() {
+	allocTestCase1();
+}
+
 
 int main(int argc, char* argv[]) {
 
-	testString();
-	
+	// testString();
+	testAlloc();
 	return 0;
 }

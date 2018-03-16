@@ -1,12 +1,14 @@
 #ifndef TINYVECTOR_H__
 #define TINYVECTOR_H__
 
-class TinyVector {
-public:
-	TinyVector();
+#include "TinyAllocator.h"
 
-private:
-	int* ivec;
-};
+namespace Miku {
+	template<typename T, typename Allocator = Miku::allocator>
+	class TinyVector {
+
+	};
+}
+
 
 #endif // !TINYVECTOR_H__
