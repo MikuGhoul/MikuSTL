@@ -5,6 +5,7 @@ namespace Miku {
 
 	template<typename T>
 	class allocator {
+
 	public:
 		// typedef
 		using value_type = T;

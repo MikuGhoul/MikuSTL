@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\TinyAllocator.h" />
+    <ClInclude Include="Include\TinyAllocTraits.h" />
     <ClInclude Include="Include\TinyArray.h" />
     <ClInclude Include="Include\TinyString.h" />
     <ClInclude Include="Test\testAlloc.hpp" />

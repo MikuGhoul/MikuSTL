@@ -59,6 +59,9 @@
     <ClInclude Include="Test\testAlloc.hpp">
       <Filter>Test</Filter>
     </ClInclude>
+    <ClInclude Include="Include\TinyAllocTraits.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
