@@ -26,6 +26,7 @@ void testString() {
 
 void testAlloc() {
 	allocTestCase1();
+	allocTestCase2();
 }
 
 

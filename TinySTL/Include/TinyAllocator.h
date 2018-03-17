@@ -23,7 +23,7 @@ namespace Miku {
 
 		// constructor
 		allocator() = default;
-		allocator(const allocator& other);
+		allocator(const allocator& other) = default;
 		template<typename U>
 		allocator(const allocator<U>& other);
 		
@@ -43,14 +43,32 @@ namespace Miku {
 
 		// placement new
 		void construct(pointer p, const_reference val) {
-			new (p) value_type(val);
+			new ((void*)p) value_type(val);
 		}
+
+		/*template<class U, class... Args>
+		void  construct(U* p, Args&&... args) {
+			new ((void*)p) U(std::forward<Args>(args)...);
+		}*/
 
 		void destroy(pointer p) {
 			p->~value_type();
 		}
 
+
 	};
+
+
+	template<typename T1, typename T2>
+	bool operator==(const allocator<T1>& lhs, const allocator<T2>& rhs) {
+		return true;
+	}
+
+	template<typename T1, typename T2>
+	bool operator!=(const allocator<T1>& lhs, const allocator<T2>& rhs) {
+		return false;
+	}
+
 
 
 }

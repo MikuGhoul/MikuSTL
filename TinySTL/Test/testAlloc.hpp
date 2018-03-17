@@ -1,8 +1,9 @@
 #ifndef TESTALLOC_H__
 #define TESTALLOC_H__
 
-#include "../Include/TinyAllocator.h"
 #include <iostream>
+#include "../Include/TinyAllocator.h"
+#include "../Include/TinyAllocTraits.h"
 
 //class Type{
 //public:
@@ -21,6 +22,9 @@ void allocTestCase1() {
 	 assert(*p == 100);
 	 a.deallocate(p, 1);
 
+	 Miku::allocator<int> b = a;
+	 assert(a == b);
+
 	/*Miku::allocator<Type> a;
 	auto p = a.allocate(1);
 
@@ -29,6 +33,18 @@ void allocTestCase1() {
 
 	a.deallocate(p, 1);*/
 
+}
+
+void allocTestCase2() {
+	Miku::allocator<int> a;
+	auto p = Miku::allocator_traits<Miku::allocator<int>>::allocate(a, 2);
+
+	Miku::allocator_traits<Miku::allocator<int>>::construct(a, p, 100);
+	assert(*(p + 0) == 100);
+	// does not support C++ 11, just like this...
+	// Miku::allocator_traits<Miku::allocator<int>>::construct(a, p, 100, 200, 300);
+	// assert(*(p + 1) == 200);
+	
 }
 
 
