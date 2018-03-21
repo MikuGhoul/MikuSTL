@@ -62,6 +62,12 @@
     <ClInclude Include="Include\TinyAllocTraits.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Include\TinyIterator.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TinyList.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

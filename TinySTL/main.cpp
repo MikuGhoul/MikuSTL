@@ -3,10 +3,12 @@
 
 
 
+#include "Test/testAlloc.hpp"
+#include "Test/testList.hpp"
+
 #include "Test/testString.hpp"
 #include "Test/testVector.hpp"
 #include "Test/testHeader.hpp"
-#include "Test/testAlloc.hpp"
 
 void testString() {
 	stringTestCase1();
@@ -29,10 +31,14 @@ void testAlloc() {
 	allocTestCase2();
 }
 
+void testList() {
+	listTestCase1();
+}
 
 int main(int argc, char* argv[]) {
 
 	// testString();
 	testAlloc();
+	testList();
 	return 0;
 }
