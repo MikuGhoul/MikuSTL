@@ -1,9 +1,9 @@
 #ifndef TINYLIST_H__
 #define TINYLIST_H__
 
-#include "TinyAllocator.h"
-#include "TinyAllocTraits.h"
-#include "TinyIterator.h"
+ #include "TinyAllocator.h"
+ #include "TinyAllocTraits.h"
+ #include "TinyIterator.h"
 
 namespace Miku {
 
@@ -19,13 +19,13 @@ namespace Miku {
 	class _List_Iterator {
 
 	public:
-		using iterator_category = Miku::bidirectional_iterator_tag;
-		using value_type = T;
-		using pointer = T * ;
-		using reference = T & ;
-		using difference_type = std::ptrdiff_t;
-		using link_type = _List_Node<T> * ;
-		using self = _List_Iterator<T>;
+		using iterator_category = typename Miku::bidirectional_iterator_tag;
+		using value_type = typename T;
+		using pointer = typename T * ;
+		using reference = typename T & ;
+		using difference_type = typename std::ptrdiff_t;
+		using link_type = typename _List_Node<T> * ;
+		using self = typename _List_Iterator<T>;
 		
 	private:
 		link_type node;
@@ -50,7 +50,7 @@ namespace Miku {
 	};
 
 
-	template<class T, class Allocator = Miku::allocator>
+	template<class T, class Allocator = Miku::allocator<T>>
 	class list {
 
 	private:
@@ -59,22 +59,37 @@ namespace Miku {
 
 	public:
 		using value_type = T;
-		using allocator_type = Allocator;
-		using size_type = std::size_t;
-		using difference_type = std::ptrdiff_t;
-		using reference = value_type&;
-		using const_reference = const value_type&;
-		using pointer = Miku::allocator_traits<Allocator>::pointer;
-		using const_pointer = Miku::allocator_traits<Allocator>::const_pointer;
+		using allocator_type = typename Allocator;
+		using size_type = typename std::size_t;
+		using difference_type = typename std::ptrdiff_t;
+		using reference = typename value_type&;
+		using const_reference = typename const value_type&;
+		using pointer = typename Miku::allocator_traits<Allocator>::pointer;
+		using const_pointer = typename Miku::allocator_traits<Allocator>::const_pointer;
 
 		using iterator = _List_Iterator<T>;
 
 	private:
 		link_type node;
-	
-	};
-}
 
+	public:
+		list();
+		// list(size_type count, const T& value = T(), const allocator_type& alloc = Allocator());
+
+	private:
+
+	};
+	
+
+}
+//namespace Miku {
+//	template<class T, class Allocator>
+//	inline list<T, Allocator>::list() {
+//
+//	}
+//}
+
+#include "TinyList.impl.h"
 
 #endif // !TINYLIST_H__
 

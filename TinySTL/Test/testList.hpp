@@ -10,7 +10,8 @@ struct Test {
 
 void listTestCase1() {
 	Miku::list<int> a;
-	Miku::list<int>::iterator i;
+	
+	/*Miku::list<int>::iterator i;
 	
 	Miku::list<Test>::iterator iA;
 
@@ -21,7 +22,7 @@ void listTestCase1() {
 	iA.operator->()->a;
 	
 	iA++;
-	++iA;
+	++iA;*/
 }
 
 

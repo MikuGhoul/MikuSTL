@@ -1,6 +1,8 @@
 #ifndef TINY_ALLOCATOR_H_
 #define TINY_ALLOCATOR_H_
 
+#include <cstddef>
+
 namespace Miku {
 
 	template<typename T>
@@ -8,13 +10,13 @@ namespace Miku {
 
 	public:
 		// typedef
-		using value_type = T;
-		using pointer = value_type* ;
-		using const_pointer = const value_type* ;
-		using reference = value_type& ;
-		using const_reference = const value_type& ;
-		using size_type = std::size_t;
-		using difference_type = std::ptrdiff_t;
+		using value_type = typename T;
+		using pointer = typename value_type* ;
+		using const_pointer = typename const value_type* ;
+		using reference = typename value_type& ;
+		using const_reference = typename const value_type& ;
+		using size_type = typename std::size_t;
+		using difference_type = typename std::ptrdiff_t;
 
 		template<typename U>
 		class rebind {

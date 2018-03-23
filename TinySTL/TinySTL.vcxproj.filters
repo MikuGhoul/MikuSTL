@@ -33,6 +33,9 @@
     <ClCompile Include="Include\TinyArray.cpp">
       <Filter>Implement</Filter>
     </ClCompile>
+    <ClCompile Include="Include\TinyList.impl.h">
+      <Filter>Implement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\TinyVector.h">
@@ -67,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="Include\TinyList.h">
       <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\testList.hpp">
+      <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
