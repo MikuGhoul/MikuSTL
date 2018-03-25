@@ -9,8 +9,19 @@ struct Test {
 };
 
 void listTestCase1() {
-	Miku::list<int> a;
-	
+	Miku::list<int> alist;
+
+	Miku::list<int>::iterator iA = alist.begin();
+	// std::cout << *iA << std::endl;
+
+	*iA = 100;
+	assert(*iA == 100);
+	// std::cout << *iA << std::endl;
+	std::cout << "size:\t" << alist.size() << std::endl;
+
+	// Miku::list<int> blist(2, 4);
+
+
 	/*Miku::list<int>::iterator i;
 	
 	Miku::list<Test>::iterator iA;

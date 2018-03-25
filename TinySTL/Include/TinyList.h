@@ -12,11 +12,15 @@ namespace Miku {
 		using list_pointer = _List_Node<T>*;
 		list_pointer prev;
 		list_pointer next;
-		T date;
+		T data;
 	};
 
 	template<class T>
 	class _List_Iterator {
+		template<class U>
+		friend bool operator==(const _List_Iterator<U>& lhs, const _List_Iterator<U>& rhs);
+		template<class U>
+		friend bool operator!=(const _List_Iterator<U>& lhs, const _List_Iterator<U>& rhs);
 
 	public:
 		using iterator_category = typename Miku::bidirectional_iterator_tag;
@@ -29,25 +33,55 @@ namespace Miku {
 		
 	private:
 		link_type node;
+	public:
+		_List_Iterator() = default;
+		~_List_Iterator() = default;
+		_List_Iterator operator=(link_type _node) {
+			node = _node;
+			return *this;
+		}
 
 	public:
 		reference operator*() const {
-			return node->date;
+			return node->data;
 		}
 		pointer operator->() const {
 			return &(operator*());
 		}
-		self& operator++() const {
+		self& operator++() {
 			node = node->next;
 			return *this;
 		}
-		self operator++(int) const {
+		self operator++(int) {
 			link_type temp = node;
 			node = node->next;
 			return temp;
 		}
 
 	};
+	
+	template<class T>
+	bool operator==(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs) {
+		/*if (lhs.node == rhs.node)
+			return true;
+		return false;*/
+		std::cout << " == " << std::endl;
+		/*if (!lhs.node  || !rhs.node)
+			return false;*/
+		if (lhs.node->data == rhs.node->data &&
+			lhs.node->next == rhs.node->next &&
+			lhs.node->prev == rhs.node->prev)
+			return true;
+		return false;
+	}
+
+	template<class T>
+	bool operator!=(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs) {
+		std::cout << " != " << std::endl;
+		if (lhs == rhs)
+			return false;
+		return true;
+	}
 
 
 	template<class T, class Allocator = Miku::allocator<T>>
@@ -71,23 +105,33 @@ namespace Miku {
 
 	private:
 		link_type node;
+		iterator head;
+		iterator tail;
 
 	public:
 		list();
-		// list(size_type count, const T& value = T(), const allocator_type& alloc = Allocator());
+		list(size_type count, const value_type& value = value_type());
+		template<class InputIt>
+		list(InputIt first, InputIt last);
+		list(const list& other);
+		list(std::initializer_list<value_type> init);
 
 	private:
+		void _init_Iter();
 
+	public:
+		iterator begin() { return head; }
+		iterator end() {
+			iterator temp = tail;
+			return ++temp;
+		}
+
+		// size_type size() const { return std::distance(head, ++tail); }
+		size_type size();
 	};
 	
-
 }
-//namespace Miku {
-//	template<class T, class Allocator>
-//	inline list<T, Allocator>::list() {
-//
-//	}
-//}
+
 
 #include "TinyList.impl.h"
 
