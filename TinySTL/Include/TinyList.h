@@ -1,6 +1,7 @@
 #ifndef TINYLIST_H__
 #define TINYLIST_H__
 
+ #include <cstddef>
  #include "TinyAllocator.h"
  #include "TinyAllocTraits.h"
  #include "TinyIterator.h"
@@ -65,7 +66,7 @@ namespace Miku {
 		/*if (lhs.node == rhs.node)
 			return true;
 		return false;*/
-		std::cout << " == " << std::endl;
+		// std::cout << " == " << std::endl;
 		/*if (!lhs.node  || !rhs.node)
 			return false;*/
 		if (lhs.node->data == rhs.node->data &&
@@ -77,7 +78,7 @@ namespace Miku {
 
 	template<class T>
 	bool operator!=(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs) {
-		std::cout << " != " << std::endl;
+		// std::cout << " != " << std::endl;
 		if (lhs == rhs)
 			return false;
 		return true;
@@ -110,7 +111,16 @@ namespace Miku {
 
 	public:
 		list();
-		list(size_type count, const value_type& value = value_type());
+		// 委托构造一下
+		// 否则若直接传int，template<class Input> list(Input, Input)和list(size_type, const_reference)都需要类型转换，无法确定调用哪个
+		list(int count, const_reference value) {
+			assert(count >= 0);
+			list(static_cast<std::size_t>(count), value);
+		}
+		list(size_type count, const_reference value = value_type()) {
+			// std::cout << value << std::endl;
+			std::cout << "???" << std::endl;
+		}
 		template<class InputIt>
 		list(InputIt first, InputIt last);
 		list(const list& other);

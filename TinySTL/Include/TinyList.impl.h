@@ -31,8 +31,8 @@ namespace Miku {
 		node->next = _nodeNull;
 	}
 
-	template<class T, class Allocator>
-	inline list<T, Allocator>::list(size_type count, const value_type & value) {
+	/*template<class T, class Allocator>
+	inline list<T, Allocator>::list(typename size_type count, typename const value_type & value) {
 		Miku::allocator<list_node> a;
 		node = a.allocate(count);
 		 _init_Iter();
@@ -44,7 +44,7 @@ namespace Miku {
 			if (temp->next)
 				++tail;
 		}
-	}
+	}*/
 
 
 	/*template<class T, class Allocator>
