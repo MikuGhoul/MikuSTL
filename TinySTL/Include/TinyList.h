@@ -8,6 +8,17 @@
 
 namespace Miku {
 
+	// 前置声明，一对一友好关系时候用。这里的实现用的是一对多关系
+	/*template<class T, class Allocator = Miku::allocator<T>>
+	class list;
+	template<class T>
+	class _List_Iterator;
+	template<class T>
+	bool operator==(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs);
+	template<class T>
+	bool operator!=(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs);*/
+
+
 	template<class T>
 	struct _List_Node {
 		using list_pointer = _List_Node<T>*;
@@ -18,10 +29,14 @@ namespace Miku {
 
 	template<class T>
 	class _List_Iterator {
-		template<class U>
-		friend bool operator==(const _List_Iterator<U>& lhs, const _List_Iterator<U>& rhs);
-		template<class U>
-		friend bool operator!=(const _List_Iterator<U>& lhs, const _List_Iterator<U>& rhs);
+
+		template<class T, class Allocator = Miku::allocator<T>>
+		friend class list;
+
+		template<class T>
+		friend bool operator==(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs);
+		template<class T>
+		friend bool operator!=(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs);
 
 	public:
 		using iterator_category = typename Miku::bidirectional_iterator_tag;
@@ -37,10 +52,10 @@ namespace Miku {
 	public:
 		_List_Iterator() = default;
 		~_List_Iterator() = default;
-		_List_Iterator operator=(link_type _node) {
+		/*_List_Iterator operator=(link_type _node) {
 			node = _node;
 			return *this;
-		}
+		}*/
 
 	public:
 		reference operator*() const {
@@ -94,8 +109,8 @@ namespace Miku {
 
 	public:
 		using value_type = T;
-		using allocator_type = typename Allocator;
-		using size_type = typename std::size_t;
+		using allocator_type = Allocator;
+		using size_type = std::size_t;
 		using difference_type = typename std::ptrdiff_t;
 		using reference = typename value_type&;
 		using const_reference = typename const value_type&;
@@ -113,14 +128,8 @@ namespace Miku {
 		list();
 		// 委托构造一下
 		// 否则若直接传int，template<class Input> list(Input, Input)和list(size_type, const_reference)都需要类型转换，无法确定调用哪个
-		list(int count, const_reference value) {
-			assert(count >= 0);
-			list(static_cast<std::size_t>(count), value);
-		}
-		list(size_type count, const_reference value = value_type()) {
-			// std::cout << value << std::endl;
-			std::cout << "???" << std::endl;
-		}
+		list(int count, const_reference value = value_type()) : list(static_cast<std::size_t>(count), value) {}
+		list(size_type count, const_reference value = value_type());
 		template<class InputIt>
 		list(InputIt first, InputIt last);
 		list(const list& other);

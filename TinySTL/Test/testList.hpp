@@ -21,11 +21,10 @@ void listTestCase1() {
 	// std::cout << "size:\t" << alist.size() << std::endl;
 	assert(alist.size() == 1);
 
-	// unsigned int a = 100;
-	size_t a = 100;
-	int b = 20;
-	// Miku::list<int> blist(-1, 100);
-	Miku::list<int> clist(1, 100);
+	Miku::list<int> blist(2, 100);
+
+	Miku::list<int>::iterator iB = blist.begin();
+	std::cout << *iB << std::endl;
 
 	/*Miku::list<int>::iterator i;
 	
