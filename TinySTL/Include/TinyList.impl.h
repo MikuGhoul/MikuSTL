@@ -14,22 +14,11 @@ namespace Miku {
 	}
 
 	template<class T, class Allocator>
-	inline list<T, Allocator>::list() {
-		Miku::allocator<list_node> a;
-		node = a.allocate(1);
-		link_type _nodeNull = a.allocate(1);
-		_nodeNull->data = NULL;
-		_nodeNull->prev = node;
-		_nodeNull->next = nullptr;
-		node->next = _nodeNull;
-		_init_Iter();
-	}
+	inline void list<T, Allocator>::_Construct_Proxy(size_type count, const_reference value) {
+		Miku::allocator<list_node> _altor;
+		node = _altor.allocate(1);
+		link_type _nodeNull = _altor.allocate(1);
 
-	template<class T, class Allocator>
-	inline list<T, Allocator>::list(size_type count, const_reference value) {
-		Miku::allocator<list_node> a;
-		node = a.allocate(1);
-		link_type _nodeNull = a.allocate(1);
 		_nodeNull->data = NULL;
 		_nodeNull->prev = node;
 		_nodeNull->next = nullptr;
@@ -38,10 +27,13 @@ namespace Miku {
 		node->data = value;
 		_init_Iter();
 
+		if (count == 1)
+			return;
+
 		link_type temp;
 		// Î²ºó²åÈë
 		for (int i = 1; i != count; ++i) {
-			temp = a.allocate(1);
+			temp = _altor.allocate(1);
 			temp->data = value;
 
 			_nodeNull->prev->next = temp;
@@ -49,15 +41,33 @@ namespace Miku {
 
 			temp->next = _nodeNull;
 			_nodeNull->prev = temp;
-		}
 
+			++tail;
+		}
 	}
 
+	template<class T, class Allocator>
+	inline list<T, Allocator>::list() {
+		_Construct_Proxy(1, NULL);
+	}
+
+	template<class T, class Allocator>
+	inline list<T, Allocator>::list(size_type count, const_reference value) {
+		_Construct_Proxy(count, value);
+	}
 
 	/*template<class T, class Allocator>
-	size_type list<T, Allocator>::size() const {
-		return 1;
+	template<class InputIt>
+	inline Miku::list<T, Allocator>::list(InputIt first, InputIt last, std::input_iterator_tag) {
+
 	}*/
+
+	template<class T, class Allocator>
+	template<class InputIt>
+	inline Miku::list<T, Allocator>::list(InputIt first, InputIt last, typename std::enable_if<!std::is_integral<InputIt>::value>::type *) {
+		
+	}
+
 	template<class T, class Allocator>
 	typename Miku::list<T, Allocator>::size_type Miku::list<T, Allocator>::size() {
 		int _size = 0;

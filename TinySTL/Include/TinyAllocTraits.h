@@ -10,7 +10,7 @@ namespace Miku {
 	class allocator_traits {
 
 	public:
-		using allocator_type = typename Alloc;
+		using allocator_type = Alloc;
 		using value_type = typename Alloc::value_type;
 		using pointer = typename Alloc::pointer;
 		using const_pointer = typename Alloc::const_pointer;
@@ -30,7 +30,7 @@ namespace Miku {
 
 
 		// static function in template class
-		static typename pointer allocate(typename Alloc& a, size_type n) {
+		static pointer allocate(Alloc& a, size_type n) {
 			return a.allocate(n);
 		}
 

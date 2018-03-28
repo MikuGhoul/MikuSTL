@@ -5,6 +5,8 @@
  #include "TinyAllocator.h"
  #include "TinyAllocTraits.h"
  #include "TinyIterator.h"
+ #include <iterator>
+#include <type_traits>
 
 namespace Miku {
 
@@ -30,7 +32,7 @@ namespace Miku {
 	template<class T>
 	class _List_Iterator {
 
-		template<class T, class Allocator = Miku::allocator<T>>
+		template<class T, class Allocator>
 		friend class list;
 
 		template<class T>
@@ -40,12 +42,12 @@ namespace Miku {
 
 	public:
 		using iterator_category = typename Miku::bidirectional_iterator_tag;
-		using value_type = typename T;
-		using pointer = typename T * ;
-		using reference = typename T & ;
+		using value_type = T;
+		using pointer = T * ;
+		using reference = T & ;
 		using difference_type = typename std::ptrdiff_t;
-		using link_type = typename _List_Node<T> * ;
-		using self = typename _List_Iterator<T>;
+		using link_type = _List_Node<T> * ;
+		using self = _List_Iterator<T>;
 		
 	private:
 		link_type node;
@@ -69,11 +71,20 @@ namespace Miku {
 			return *this;
 		}
 		self operator++(int) {
-			link_type temp = node;
-			node = node->next;
+			self temp = *this;
+			++*this;
+			return temp;
+
+		}
+		self& operator--() {
+			node = node->prev;
+			return *this;
+		}
+		self operator--(int) {
+			self temp = *this;
+			--*this;
 			return temp;
 		}
-
 	};
 	
 	template<class T>
@@ -112,8 +123,8 @@ namespace Miku {
 		using allocator_type = Allocator;
 		using size_type = std::size_t;
 		using difference_type = typename std::ptrdiff_t;
-		using reference = typename value_type&;
-		using const_reference = typename const value_type&;
+		using reference =  value_type&;
+		using const_reference =  const value_type&;
 		using pointer = typename Miku::allocator_traits<Allocator>::pointer;
 		using const_pointer = typename Miku::allocator_traits<Allocator>::const_pointer;
 
@@ -126,17 +137,22 @@ namespace Miku {
 
 	public:
 		list();
-		// 委托构造一下
-		// 否则若直接传int，template<class Input> list(Input, Input)和list(size_type, const_reference)都需要类型转换，无法确定调用哪个
-		list(int count, const_reference value = value_type()) : list(static_cast<std::size_t>(count), value) {}
+		// TODO
+		// SFINAE解决重载决议冲突问题，但我不知道为什么第二种写法不会触发SFINAE
 		list(size_type count, const_reference value = value_type());
 		template<class InputIt>
-		list(InputIt first, InputIt last);
+		list(InputIt first, InputIt last,
+			typename std::enable_if<!std::is_integral<InputIt>::value>::type* = nullptr);
+			// std::input_iterator_tag = typename std::iterator_traits<InputIt>::iterator_category{});
+			// input_iterator_tag = typename Iterator_Traits<InputIt>::iterator_category{});
+
 		list(const list& other);
 		list(std::initializer_list<value_type> init);
 
 	private:
 		void _init_Iter();
+		// not include the last `NULL` node
+		void _Construct_Proxy(size_type, const_reference value);
 
 	public:
 		iterator begin() { return head; }

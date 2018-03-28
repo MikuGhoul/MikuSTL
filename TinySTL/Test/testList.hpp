@@ -17,27 +17,18 @@ void listTestCase1() {
 
 	*iA = 100;
 	assert(*iA == 100);
-	// std::cout << *iA << std::endl;
-	// std::cout << "size:\t" << alist.size() << std::endl;
 	assert(alist.size() == 1);
 
-	Miku::list<int> blist(2, 100);
+	Miku::list<int> blist(3, 100);
+	Miku::list<int>::iterator iBb = blist.begin();
+	assert(blist.size() == 3);
+	assert(*iBb == 100);
+	assert(*(++iBb) == 100);
+	assert(*(iBb++) == 100);
 
-	Miku::list<int>::iterator iB = blist.begin();
-	std::cout << *iB << std::endl;
-
-	/*Miku::list<int>::iterator i;
-	
-	Miku::list<Test>::iterator iA;
-
-	(*iA).a;
-	iA.operator*().a;
-
-	iA->a;
-	iA.operator->()->a;
-	
-	iA++;
-	++iA;*/
+	Miku::list<int>::iterator iBe = blist.end();
+	assert(*(--iBe) == 100);
+	assert(*(iBe--) == 100);
 }
 
 
