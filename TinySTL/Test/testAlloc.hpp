@@ -5,14 +5,6 @@
 #include "../Include/TinyAllocator.h"
 #include "../Include/TinyAllocTraits.h"
 
-//class Type{
-//public:
-//	Type() { std::cout << "constructor" << std::endl; }
-//	Type(int _t) : t(_t) { std::cout << "constructor" << t << std::endl; }
-//	~Type() { std::cout << "destroctor" << std::endl; }
-//private:
-//	int t;
-//};
 
 void allocTestCase1() {
 	 Miku::allocator<int> a;
@@ -47,6 +39,12 @@ void allocTestCase2() {
 	
 }
 
+void allocTestCase3() {
+	auto p = Miku::allocator<int>::allocate(1);
+	Miku::allocator<int>::construct(p, 100);
+	assert(*p == 100);
+	Miku::allocator<int>::deallocate(p, 1);
+}
 
 #endif // !TESTALLOC_H__
 

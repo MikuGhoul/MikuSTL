@@ -34,17 +34,21 @@ namespace Miku {
 
 
 		// defined in class ,so default inline
-		pointer allocate(size_type n) {
+		static pointer allocate() {
+			return static_cast<pointer>(::operator new(sizeof(value_type)));
+		}
+
+		static pointer allocate(size_type n) {
 			return static_cast<pointer>(::operator new(n * sizeof(value_type)));
 		}
 
 		// all right, I don't know what n can do
-		void deallocate(pointer p, size_type n) {
+		static void deallocate(pointer p, size_type n) {
 			::operator delete(p);
 		}
 
 		// placement new
-		void construct(pointer p, const_reference val) {
+		static void construct(pointer p, const_reference val) {
 			new ((void*)p) value_type(val);
 		}
 
@@ -53,7 +57,7 @@ namespace Miku {
 			new ((void*)p) U(std::forward<Args>(args)...);
 		}*/
 
-		void destroy(pointer p) {
+		static void destroy(pointer p) {
 			p->~value_type();
 		}
 

@@ -11,25 +11,47 @@ struct Test {
 
 void listTestCase1() {
 	Miku::list<int> alist;
-
 	Miku::list<int>::iterator iA = alist.begin();
-	// std::cout << *iA << std::endl;
+	alist.insert(iA, 2);
+	assert(*(alist.begin()) == 2);
 
 	*iA = 100;
 	assert(*iA == 100);
-	assert(alist.size() == 1);
 
-	Miku::list<int> blist(3, 100);
-	Miku::list<int>::iterator iBb = blist.begin();
-	assert(blist.size() == 3);
-	assert(*iBb == 100);
-	assert(*(++iBb) == 100);
-	assert(*(iBb++) == 100);
-
-	Miku::list<int>::iterator iBe = blist.end();
-	assert(*(--iBe) == 100);
-	assert(*(iBe--) == 100);
 }
 
+void listTestCase2() {
+	Miku::list<int> alist(3, 100);
+	for (auto i : alist)
+		assert(i == 100);
+}
+
+void listTestCase3() {
+	Miku::list<int> alist(3, 100);
+	assert(alist.size() == 3);
+	alist.push_back(17);
+	assert(alist.size() == 4);
+	assert(*(--alist.end()) == 17);
+}
+
+void listTestCase4() {
+	Miku::list<int> alist(3, 100);
+	Miku::list<int> blist(alist.begin(), alist.end());
+	for (auto i : blist)
+		assert(i == 100);
+	assert(blist.size() == 3);
+
+	Miku::list<int> clist(alist);
+	for (auto i : clist)
+		assert(i == 100);
+
+	Miku::list<int> dlist{ 1, 2, 3 };
+	assert(*(dlist.begin()) == 1);
+	assert(*(++dlist.begin()) == 2);
+}
+
+void listTestCase5() {
+
+}
 
 #endif // !TESTLIST_H__

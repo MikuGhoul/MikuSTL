@@ -8,64 +8,59 @@
 namespace Miku {
 
 	template<class T, class Allocator>
-	inline void list<T, Allocator>::_init_Iter() {
-		head.node = node;
-		tail.node = node;
+	typename list<T, Allocator>::link_type list<T, Allocator>::_New_Node() {
+		return allocator_type::allocate();
 	}
 
 	template<class T, class Allocator>
-	inline void list<T, Allocator>::_Construct_Proxy(size_type count, const_reference value) {
-		Miku::allocator<list_node> _altor;
-		node = _altor.allocate(1);
-		link_type _nodeNull = _altor.allocate(1);
-
-		_nodeNull->data = NULL;
-		_nodeNull->prev = node;
-		_nodeNull->next = nullptr;
-		node->next = _nodeNull;
-		node->prev = nullptr;
-		node->data = value;
-		_init_Iter();
-
-		if (count == 1)
-			return;
-
-		link_type temp;
-		// 尾后插入
-		for (int i = 1; i != count; ++i) {
-			temp = _altor.allocate(1);
-			temp->data = value;
-
-			_nodeNull->prev->next = temp;
-			temp->prev = _nodeNull->prev;
-
-			temp->next = _nodeNull;
-			_nodeNull->prev = temp;
-
-			++tail;
-		}
+	typename list<T, Allocator>::link_type list<T, Allocator>::_New_Node(const_reference value) {
+		auto p = _New_Node();
+		Miku::allocator<value_type>::construct(&p->data, value);
+		return p;
 	}
 
 	template<class T, class Allocator>
-	inline list<T, Allocator>::list() {
-		_Construct_Proxy(1, NULL);
+	void list<T, Allocator>::_Void_Init() {
+		node = _New_Node();
+		node->next = node;
+		node->prev = node;
 	}
 
 	template<class T, class Allocator>
-	inline list<T, Allocator>::list(size_type count, const_reference value) {
-		_Construct_Proxy(count, value);
+	list<T, Allocator>::list() {
+		_Void_Init();
 	}
 
+	template<class T, class Allocator>
+	list<T, Allocator>::list(size_type count, const_reference value) {
+		_Void_Init();
+		insert(begin(), count, value);
+	}
+
+	template<class T, class Allocator>
+	template<class InputIt>
+	inline Miku::list<T, Allocator>::list(InputIt first, InputIt last, 
+		typename std::enable_if<!std::is_integral<InputIt>::value>::type *) {
+		_Void_Init();
+		insert(begin(), first, last);
+	}
 	/*template<class T, class Allocator>
 	template<class InputIt>
-	inline Miku::list<T, Allocator>::list(InputIt first, InputIt last, std::input_iterator_tag) {
-
+	inline Miku::list<T, Allocator>::list(InputIt first, InputIt last, 
+		typename std::enable_if<std::is_same<typename Iterator_Traits<InputIt>::iterator_category, bidirectional_iterator_tag>::value>::type *) {
+		std::cout << "what the fuck???" << std::endl;
 	}*/
 
 	template<class T, class Allocator>
-	template<class InputIt>
-	inline Miku::list<T, Allocator>::list(InputIt first, InputIt last, typename std::enable_if<!std::is_integral<InputIt>::value>::type *) {
-		
+	list<T, Allocator>::list(list& other) {
+		_Void_Init();
+		insert(begin(), other.begin(), other.end());
+	}
+
+	template<class T, class Allocator>
+	list<T, Allocator>::list(std::initializer_list<value_type> init) {
+		_Void_Init();
+		insert(begin(), init.begin(), init.end());
 	}
 
 	template<class T, class Allocator>
@@ -75,6 +70,41 @@ namespace Miku {
 			++_size;
 		}
 		return _size;
+	}
+
+	template<class T, class Allocator>
+	void list<T, Allocator>::push_back(const_reference value) {
+		insert(end(), value);
+	}
+
+	template<class T, class Allocator>
+	void list<T, Allocator>::push_front(const_reference value) {
+		insert(begin(), value);
+	}
+
+	template<class T, class Allocator>
+	typename Miku::list<T, Allocator>::iterator Miku::list<T, Allocator>::insert(iterator pos, const_reference value) {
+		link_type p = _New_Node(value);
+		pos.node->prev->next = p;
+		p->prev = pos.node->prev;
+		p->next = pos.node;
+		pos.node->prev = p;
+		return p;
+	}
+
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::insert(iterator pos, size_type count, const_reference value) {
+		for (int i = 0; i != count; ++i)
+			insert(pos, value);
+	}
+
+	template<class T, class Allocator>
+	template<class InputIt>
+	void Miku::list<T, Allocator>::insert(iterator pos, InputIt first, InputIt last,
+		typename std::enable_if<!std::is_integral<InputIt>::value>::type*) {
+		// 插入在pos前，而且pos不更改，所以可以直接调用insert(iterator, const_reference)
+		for (; first != last; ++first)
+			insert(pos, *first);
 	}
 }
 #endif // !TINYLIST_IMPL_H__

@@ -29,10 +29,14 @@
 void testAlloc() {
 	allocTestCase1();
 	allocTestCase2();
+	allocTestCase3();
 }
 
 void testList() {
 	listTestCase1();
+	listTestCase2();
+	listTestCase3();
+	listTestCase4();
 }
 
 int main(int argc, char* argv[]) {

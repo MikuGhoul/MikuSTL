@@ -1,25 +1,15 @@
 #ifndef TINYLIST_H__
 #define TINYLIST_H__
 
- #include <cstddef>
- #include "TinyAllocator.h"
- #include "TinyAllocTraits.h"
- #include "TinyIterator.h"
- #include <iterator>
+#include <cstddef>
+#include "TinyAllocator.h"
+#include "TinyAllocTraits.h"
+#include "TinyIterator.h"
+#include <iterator>
 #include <type_traits>
+#include <initializer_list>
 
 namespace Miku {
-
-	// 前置声明，一对一友好关系时候用。这里的实现用的是一对多关系
-	/*template<class T, class Allocator = Miku::allocator<T>>
-	class list;
-	template<class T>
-	class _List_Iterator;
-	template<class T>
-	bool operator==(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs);
-	template<class T>
-	bool operator!=(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs);*/
-
 
 	template<class T>
 	struct _List_Node {
@@ -31,16 +21,13 @@ namespace Miku {
 
 	template<class T>
 	class _List_Iterator {
-
-		template<class T, class Allocator>
-		friend class list;
+	public:
 
 		template<class T>
 		friend bool operator==(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs);
 		template<class T>
 		friend bool operator!=(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs);
 
-	public:
 		using iterator_category = typename Miku::bidirectional_iterator_tag;
 		using value_type = T;
 		using pointer = T * ;
@@ -49,17 +36,14 @@ namespace Miku {
 		using link_type = _List_Node<T> * ;
 		using self = _List_Iterator<T>;
 		
-	private:
 		link_type node;
-	public:
-		_List_Iterator() = default;
-		~_List_Iterator() = default;
-		/*_List_Iterator operator=(link_type _node) {
-			node = _node;
-			return *this;
-		}*/
 
-	public:
+		_List_Iterator() = default;
+		_List_Iterator(link_type _Node) {
+			node = _Node;
+		}
+		~_List_Iterator() = default;
+
 		reference operator*() const {
 			return node->data;
 		}
@@ -89,29 +73,16 @@ namespace Miku {
 	
 	template<class T>
 	bool operator==(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs) {
-		/*if (lhs.node == rhs.node)
-			return true;
-		return false;*/
-		// std::cout << " == " << std::endl;
-		/*if (!lhs.node  || !rhs.node)
-			return false;*/
-		if (lhs.node->data == rhs.node->data &&
-			lhs.node->next == rhs.node->next &&
-			lhs.node->prev == rhs.node->prev)
-			return true;
-		return false;
+		return lhs.node == rhs.node;
 	}
 
 	template<class T>
 	bool operator!=(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs) {
-		// std::cout << " != " << std::endl;
-		if (lhs == rhs)
-			return false;
-		return true;
+		return lhs.node != rhs.node;
 	}
 
-
-	template<class T, class Allocator = Miku::allocator<T>>
+	// 与SGI的list的一样，是环状双向链表
+	template<class T, class Allocator = Miku::allocator<_List_Node<T>>>
 	class list {
 
 	private:
@@ -131,38 +102,46 @@ namespace Miku {
 		using iterator = _List_Iterator<T>;
 
 	private:
+		// list的头节点，不存放数据
 		link_type node;
-		iterator head;
-		iterator tail;
 
 	public:
 		list();
 		// TODO
-		// SFINAE解决重载决议冲突问题，但我不知道为什么第二种写法不会触发SFINAE
-		list(size_type count, const_reference value = value_type());
+		// SFINAE解决重载决议冲突问题，但我不知道为什么第三种写法不会触发SFINAE，以及第一种会traits失败
+		list(size_type, const_reference = value_type());
 		template<class InputIt>
-		list(InputIt first, InputIt last,
+		list(InputIt, InputIt,
+			// typename std::enable_if<std::is_same<typename Iterator_Traits<InputIt>::iterator_category, bidirectional_iterator_tag>::value>::type* = nullptr);
 			typename std::enable_if<!std::is_integral<InputIt>::value>::type* = nullptr);
 			// std::input_iterator_tag = typename std::iterator_traits<InputIt>::iterator_category{});
 			// input_iterator_tag = typename Iterator_Traits<InputIt>::iterator_category{});
-
-		list(const list& other);
-		list(std::initializer_list<value_type> init);
+		list(list&);
+		list(std::initializer_list<value_type>);
 
 	private:
-		void _init_Iter();
-		// not include the last `NULL` node
-		void _Construct_Proxy(size_type, const_reference value);
+		link_type _New_Node();
+		link_type _New_Node(const_reference);
+		// 构造空链表，只有一个node，prev与next指向自己
+		void _Void_Init();
 
 	public:
-		iterator begin() { return head; }
-		iterator end() {
-			iterator temp = tail;
-			return ++temp;
-		}
+		iterator begin() { return node->next; }
+		iterator end() { return node; }
 
-		// size_type size() const { return std::distance(head, ++tail); }
 		size_type size();
+		// TODO
+		// void push_back( T&& value );
+		void push_back(const_reference);
+		void push_front(const_reference);
+
+		iterator insert(iterator, const_reference);
+		// TODO 
+		// const_iterator
+		void insert(iterator, size_type, const_reference);
+		template<class InputIt>
+		void insert(iterator, InputIt, InputIt,
+			typename std::enable_if<!std::is_integral<InputIt>::value>::type* = nullptr);
 	};
 	
 }
