@@ -11,82 +11,151 @@
 
 namespace Miku {
 
-	template<class T>
-	struct _List_Node {
-		using list_pointer = _List_Node<T>*;
-		list_pointer prev;
-		list_pointer next;
-		T data;
-	};
-
-	template<class T>
-	class _List_Iterator {
-	public:
+	namespace Internal {
 
 		template<class T>
-		friend bool operator==(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs);
+		struct _List_Node {
+			using list_pointer = _List_Node<T>*;
+
+			list_pointer prev;
+			list_pointer next;
+			T data;
+
+			_List_Node(list_pointer p, list_pointer n, T d) : prev(p), next(n), data(d) {}
+		};
+
 		template<class T>
-		friend bool operator!=(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs);
+		class _List_Iterator {
+		public:
 
-		using iterator_category = typename Miku::bidirectional_iterator_tag;
-		using value_type = T;
-		using pointer = T * ;
-		using reference = T & ;
-		using difference_type = typename std::ptrdiff_t;
-		using link_type = _List_Node<T> * ;
-		using self = _List_Iterator<T>;
-		
-		link_type node;
+			template<class T>
+			friend bool operator==(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs);
+			template<class T>
+			friend bool operator!=(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs);
 
-		_List_Iterator() = default;
-		_List_Iterator(link_type _Node) {
-			node = _Node;
-		}
-		~_List_Iterator() = default;
+			using iterator_category = typename Miku::bidirectional_iterator_tag;
+			using value_type = T;
+			using pointer = T * ;
+			using reference = T & ;
+			using difference_type = typename std::ptrdiff_t;
+			using link_type = _List_Node<T> *;
+			using self = _List_Iterator<T>;
 
-		reference operator*() const {
-			return node->data;
-		}
-		pointer operator->() const {
-			return &(operator*());
-		}
-		self& operator++() {
-			node = node->next;
-			return *this;
-		}
-		self operator++(int) {
-			self temp = *this;
-			++*this;
-			return temp;
+			link_type node;
 
+			_List_Iterator() = default;
+			_List_Iterator(link_type _Node) {
+				node = _Node;
+			}
+			~_List_Iterator() = default;
+
+			reference operator*() const {
+				return node->data;
+			}
+			pointer operator->() const {
+				return &(operator*());
+			}
+			self& operator++() {
+				node = node->next;
+				return *this;
+			}
+			self operator++(int) {
+				self temp = *this;
+				++*this;
+				return temp;
+
+			}
+			self& operator--() {
+				node = node->prev;
+				return *this;
+			}
+			self operator--(int) {
+				self temp = *this;
+				--*this;
+				return temp;
+			}
+		};
+
+		template<class T>
+		bool operator==(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs) {
+			return lhs.node == rhs.node;
 		}
-		self& operator--() {
-			node = node->prev;
-			return *this;
+
+		template<class T>
+		bool operator!=(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs) {
+			return lhs.node != rhs.node;
 		}
-		self operator--(int) {
-			self temp = *this;
-			--*this;
-			return temp;
+
+		// TODO
+		// 看了MSVC的实现是针对const_iterator有个特化类，也不算特化，就是单独一个类
+		// 不然List是const的时候进行迭代器操作，我也没想出来有什么好办法可以用non-const_iterator操作
+		template<class T>
+		class _List_Const_Iterator {
+		public:
+
+			template<class T>
+			friend bool operator==(const _List_Const_Iterator<T>& lhs, const _List_Const_Iterator<T>& rhs);
+			template<class T>
+			friend bool operator!=(const _List_Const_Iterator<T>& lhs, const _List_Const_Iterator<T>& rhs);
+
+			using iterator_category = typename Miku::bidirectional_iterator_tag;
+			using value_type = T;
+			using pointer = const T * ;
+			using reference = const T & ;
+			using difference_type = typename std::ptrdiff_t;
+			using link_type = const _List_Node<T> *;
+			using self = _List_Const_Iterator<T>;
+
+			link_type node;
+
+			_List_Const_Iterator() = default;
+			_List_Const_Iterator(link_type _Node) {
+				node = _Node;
+			}
+			~_List_Const_Iterator() = default;
+
+			reference operator*() const {
+				return node->data;
+			}
+			pointer operator->() const {
+				return &(operator*());
+			}
+			self& operator++() {
+				node = node->next;
+				return *this;
+			}
+			self operator++(int) {
+				self temp = *this;
+				++*this;
+				return temp;
+			}
+			self& operator--() {
+				node = node->prev;
+				return *this;
+			}
+			self operator--(int) {
+				self temp = *this;
+				--*this;
+				return temp;
+			}
+		};
+		template<class T>
+		bool operator==(const _List_Const_Iterator<T>& lhs, const _List_Const_Iterator<T>& rhs) {
+			return lhs.node == rhs.node;
 		}
-	};
+
+		template<class T>
+		bool operator!=(const _List_Const_Iterator<T>& lhs, const _List_Const_Iterator<T>& rhs) {
+			return lhs.node != rhs.node;
+		}
+	}
 	
-	template<class T>
-	bool operator==(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs) {
-		return lhs.node == rhs.node;
-	}
-
-	template<class T>
-	bool operator!=(const _List_Iterator<T>& lhs, const _List_Iterator<T>& rhs) {
-		return lhs.node != rhs.node;
-	}
-
 	// 与SGI的list的一样，是环状双向链表
-	template<class T, class Allocator = Miku::allocator<_List_Node<T>>>
+	template<class T, class Allocator = Miku::allocator<Internal::_List_Node<T>>>
 	class list {
 
 	private:
-		using list_node = _List_Node<T>;
+		using list_node = Internal::_List_Node<T>;
 		using link_type = list_node * ;
 
 	public:
@@ -99,7 +168,8 @@ namespace Miku {
 		using pointer = typename Miku::allocator_traits<Allocator>::pointer;
 		using const_pointer = typename Miku::allocator_traits<Allocator>::const_pointer;
 
-		using iterator = _List_Iterator<T>;
+		using iterator = Internal::_List_Iterator<T>;
+		using const_iterator = Internal::_List_Const_Iterator<T>;
 
 	private:
 		// list的头节点，不存放数据
@@ -117,6 +187,7 @@ namespace Miku {
 			// std::input_iterator_tag = typename std::iterator_traits<InputIt>::iterator_category{});
 			// input_iterator_tag = typename Iterator_Traits<InputIt>::iterator_category{});
 		list(list&);
+		list(list&&);
 		list(std::initializer_list<value_type>);
 		// ~list();
 
@@ -127,13 +198,15 @@ namespace Miku {
 		void _Void_Init();
 
 	public:
-		iterator begin() { return node->next; }
+		iterator begin() noexcept { return node->next; }
+		const_iterator begin() const noexcept { return node->next; }
+		const_iterator cbegin() const noexcept { return node->next; }
+
 		iterator end() { return node; }
 
 		size_type size();
-		// TODO
-		// void push_back( T&& value );
 		void push_back(const_reference);
+		void push_back(value_type&& value);
 		void push_front(const_reference);
 
 		iterator insert(iterator, const_reference);

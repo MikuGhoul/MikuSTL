@@ -58,6 +58,11 @@ namespace Miku {
 	}
 
 	template<class T, class Allocator>
+	list<T, Allocator>::list(list&& other) : node(other.node){
+		other.node = nullptr;
+	}
+
+	template<class T, class Allocator>
 	list<T, Allocator>::list(std::initializer_list<value_type> init) {
 		_Void_Init();
 		insert(begin(), init.begin(), init.end());
@@ -78,6 +83,12 @@ namespace Miku {
 	}
 
 	template<class T, class Allocator>
+	void list<T, Allocator>::push_back(value_type&& value) {
+		// TODO
+		insert(end(), std::move(value));
+	}
+
+	template<class T, class Allocator>
 	void list<T, Allocator>::push_front(const_reference value) {
 		insert(begin(), value);
 	}
@@ -88,6 +99,7 @@ namespace Miku {
 		pos.node->prev->next = p;
 		p->prev = pos.node->prev;
 		p->next = pos.node;
+
 		pos.node->prev = p;
 		return p;
 	}

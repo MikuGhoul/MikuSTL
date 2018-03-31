@@ -21,6 +21,9 @@ void listTestCase1() {
 	assert(_list_3.size() == 2);
 	assert(_list_4.size() == 2);
 	assert(_list_5.size() == 3);
+
+	Miku::list<int> _list_6(std::move(_list_5));
+	assert(_list_6.size() == 3);
 }
 
 void listTestCase2() {
@@ -40,6 +43,18 @@ void listTestCase2() {
 		assert(i == 100);
 	for (auto i = _list_2.begin(); i != _list_2.end(); ++i)
 		assert(*i == 100);
+
+	// const_iterator && const iterator²âÊÔ
+	const Miku::list<int> _list_3{ 1, 2, 3 };
+	Miku::list<int>::const_iterator _iter_4 = _list_3.begin();
+	assert(*(_list_3.begin()) == 1);
+	_iter_4++;			// OK
+	// *_iter_4 = 1;	// error
+
+	Miku::list<int> _list_4{ 2, 3 };
+	const Miku::list<int>::iterator _iter_5 = _list_4.begin();
+	// _iter_5++;		// error
+	*_iter_5 = 1;		// ok
 }
 
 void listTestCase3() {
@@ -62,6 +77,11 @@ void listTestCase3() {
 	assert(_list_2.size() == 1);
 	assert(_iter_1->a == 100);
 	assert(_iter_1->b == 'c');
+
+	int r = 42;
+	Miku::list<int> _list_3{ 1, 2 };
+	_list_3.push_back(std::move(r));
+	assert(_list_3.size() == 3);
 }
 
 void listTestCase4() {
