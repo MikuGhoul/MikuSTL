@@ -118,6 +118,7 @@ namespace Miku {
 			// input_iterator_tag = typename Iterator_Traits<InputIt>::iterator_category{});
 		list(list&);
 		list(std::initializer_list<value_type>);
+		// ~list();
 
 	private:
 		link_type _New_Node();
