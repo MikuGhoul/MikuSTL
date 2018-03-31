@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinySTL", "TinySTL\TinySTL.vcxproj", "{6D30C736-DA63-47F9-937D-DD430A3AC586}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MikuSTL", "MikuSTL\MikuSTL.vcxproj", "{6D30C736-DA63-47F9-937D-DD430A3AC586}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
