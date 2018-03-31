@@ -24,6 +24,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>TinySTL</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <ProjectName>MikuSTL</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -139,25 +140,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Include\TinyArray.cpp" />
-    <ClCompile Include="Include\TinyList.impl.h" />
-    <ClCompile Include="Include\TinyString.cpp" />
-    <ClCompile Include="Include\TinyVector.cpp" />
+    <ClCompile Include="Include\MikuArray.cpp" />
+    <ClCompile Include="Include\MikuList.impl.h" />
+    <ClCompile Include="Include\MikuString.cpp" />
+    <ClCompile Include="Include\MikuVector.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\TinyAllocator.h" />
-    <ClInclude Include="Include\TinyAllocTraits.h" />
-    <ClInclude Include="Include\TinyArray.h" />
-    <ClInclude Include="Include\TinyIterator.h" />
-    <ClInclude Include="Include\TinyList.h" />
-    <ClInclude Include="Include\TinyString.h" />
+    <ClInclude Include="Include\MikuAllocator.h" />
+    <ClInclude Include="Include\MikuAllocTraits.h" />
+    <ClInclude Include="Include\MikuArray.h" />
+    <ClInclude Include="Include\MikuIterator.h" />
+    <ClInclude Include="Include\MikuList.h" />
+    <ClInclude Include="Include\MikuString.h" />
     <ClInclude Include="Test\testAlloc.hpp" />
     <ClInclude Include="Test\testHeader.hpp" />
     <ClInclude Include="Test\testList.hpp" />
     <ClInclude Include="Test\testString.hpp" />
     <ClInclude Include="Test\testVector.hpp" />
-    <ClInclude Include="Include\TinyVector.h" />
+    <ClInclude Include="Include\MikuVector.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

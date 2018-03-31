@@ -3,7 +3,7 @@
 #ifndef TINYLIST_IMPL_H__
 #define TINYLIST_IMPL_H__
 
-#include "TinyList.h"
+#include "MikuList.h"
 	
 namespace Miku {
 

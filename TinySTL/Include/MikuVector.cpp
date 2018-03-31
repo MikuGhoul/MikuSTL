@@ -1,9 +1,9 @@
 #ifndef TINYVECTOR_H__
 #define TINYVECTOR_H__
 
-#include "TinyAllocator.h"
-#include "TinyAllocTraits.h"
-#include "TinyIterator.h"
+#include "MikuAllocator.h"
+#include "MikuAllocTraits.h"
+#include "MikuIterator.h"
 
 namespace Miku {
 	template<class T, class Allocator = Miku::allocator<T>>

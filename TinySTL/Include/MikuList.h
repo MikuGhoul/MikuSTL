@@ -2,9 +2,9 @@
 #define TINYLIST_H__
 
 #include <cstddef>
-#include "TinyAllocator.h"
-#include "TinyAllocTraits.h"
-#include "TinyIterator.h"
+#include "MikuAllocator.h"
+#include "MikuAllocTraits.h"
+#include "MikuIterator.h"
 #include <iterator>
 #include <type_traits>
 #include <initializer_list>
@@ -221,7 +221,7 @@ namespace Miku {
 }
 
 
-#include "TinyList.impl.h"
+#include "MikuList.impl.h"
 
 #endif // !TINYLIST_H__
 

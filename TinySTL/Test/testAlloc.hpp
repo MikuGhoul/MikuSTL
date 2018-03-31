@@ -2,8 +2,8 @@
 #define TESTALLOC_H__
 
 // #include <iostream>
-#include "../Include/TinyAllocator.h"
-#include "../Include/TinyAllocTraits.h"
+#include "../Include/MikuAllocator.h"
+#include "../Include/MikuAllocTraits.h"
 
 
 void allocTestCase1() {

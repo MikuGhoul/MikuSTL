@@ -24,55 +24,55 @@
     <ClCompile Include="main.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Include\TinyString.cpp">
+    <ClCompile Include="Include\MikuVector.cpp">
       <Filter>Implement</Filter>
     </ClCompile>
-    <ClCompile Include="Include\TinyVector.cpp">
+    <ClCompile Include="Include\MikuString.cpp">
       <Filter>Implement</Filter>
     </ClCompile>
-    <ClCompile Include="Include\TinyArray.cpp">
+    <ClCompile Include="Include\MikuList.impl.h">
       <Filter>Implement</Filter>
     </ClCompile>
-    <ClCompile Include="Include\TinyList.impl.h">
+    <ClCompile Include="Include\MikuArray.cpp">
       <Filter>Implement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\TinyVector.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\TinyString.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="Test\testString.hpp">
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="Test\testHeader.hpp">
       <Filter>Test</Filter>
     </ClInclude>
-    <ClInclude Include="Include\TinyAllocator.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="Test\testVector.hpp">
       <Filter>Test</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\TinyArray.h">
-      <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Test\testAlloc.hpp">
       <Filter>Test</Filter>
     </ClInclude>
-    <ClInclude Include="Include\TinyAllocTraits.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\TinyIterator.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\TinyList.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="Test\testList.hpp">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MikuVector.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MikuString.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MikuList.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MikuIterator.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MikuArray.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MikuAllocTraits.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MikuAllocator.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

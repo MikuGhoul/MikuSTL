@@ -1,7 +1,7 @@
 #ifndef TINYALLOCTRAITS_H__
 #define TINYALLOCTRAITS_H__
 
-#include "TinyAllocator.h"
+#include "MikuAllocator.h"
 #include <utility>
 
 namespace Miku {

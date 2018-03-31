@@ -1,4 +1,4 @@
-#include "TinyString.h";
+#include "MikuString.h";
 
 #include <cstring>
 #include <iostream>
