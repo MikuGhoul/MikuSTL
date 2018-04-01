@@ -196,26 +196,61 @@ namespace Miku {
 		link_type _New_Node(const_reference);
 		// 构造空链表，只有一个node，prev与next指向自己
 		void _Void_Init();
+		void _Destroy(link_type);
 
 	public:
 		iterator begin() noexcept { return node->next; }
 		const_iterator begin() const noexcept { return node->next; }
 		const_iterator cbegin() const noexcept { return node->next; }
 
-		iterator end() { return node; }
+		iterator end() noexcept { return node; }
+		const_iterator end() const noexcept { return node; }
+		const_iterator cend() const noexcept { return node; }
+		// TODO
+		// rbegin/rend, 再写个iterator就可以了
 
-		size_type size();
+		size_type size() noexcept;
+
+		bool empty() const noexcept { return node->next == node; }
+
 		void push_back(const_reference);
 		void push_back(value_type&& value);
+
 		void push_front(const_reference);
 
+		void pop_back();
+
+		void pop_front();
+
+		void clear() noexcept;
+
 		iterator insert(iterator, const_reference);
-		// TODO 
-		// const_iterator
 		void insert(iterator, size_type, const_reference);
 		template<class InputIt>
 		void insert(iterator, InputIt, InputIt,
 			typename std::enable_if<!std::is_integral<InputIt>::value>::type* = nullptr);
+
+		// TODO
+		/*template<class... Args>
+		iterator emplace(iterator, Args&&...);*/
+
+		iterator erase(iterator);
+		// erase [first, last)
+		iterator erase(iterator, iterator);
+		iterator erase(const_iterator);
+		iterator erase(const_iterator, const_iterator);
+
+		void resize(size_type, const_reference = value_type());
+
+		void swap(list&) noexcept;
+
+		/*void merge(list&);
+		template<class Compare>
+		void merge(list&, Compare);*/
+
+		/*void sort();
+		template<class Compare>
+		void sort(Compare comp);*/
 	};
 	
 }

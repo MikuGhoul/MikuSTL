@@ -43,7 +43,7 @@ namespace Miku {
 		}
 
 		// all right, I don't know what n can do
-		static void deallocate(pointer p, size_type n) {
+		static void deallocate(pointer p, size_type n = 1) {
 			::operator delete(p);
 		}
 

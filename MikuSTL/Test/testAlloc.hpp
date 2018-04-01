@@ -5,6 +5,13 @@
 #include "../Include/MikuAllocator.h"
 #include "../Include/MikuAllocTraits.h"
 
+class Test {
+public:
+	Test(int a) : aaa(a) { /*std::cout << "construct a: " << a << std::endl;*/ }
+	Test() { /*std::cout << "construct" << std::endl;*/ }
+	~Test() { /*std::cout << "destory" << std::endl;*/ }
+	int aaa;
+};
 
 void allocTestCase1() {
 	 Miku::allocator<int> a;
@@ -44,6 +51,14 @@ void allocTestCase3() {
 	Miku::allocator<int>::construct(p, 100);
 	assert(*p == 100);
 	Miku::allocator<int>::deallocate(p, 1);
+}
+
+void allocTestCase4() {
+	// 不太懂，这里构造两次，析构三次？这是被魔法优化了？
+	Test t;
+	auto p = Miku::allocator<Test>::allocate(1);
+	Miku::allocator<Test>::construct(p, 666);
+	Miku::allocator<Test>::destroy(p);
 }
 
 #endif // !TESTALLOC_H__

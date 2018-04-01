@@ -27,6 +27,14 @@ namespace Miku {
 	}
 
 	template<class T, class Allocator>
+	void list<T, Allocator>::_Destroy(link_type _Node) {
+		_Node->prev->next = _Node->next;
+		_Node->next->prev = _Node->prev;
+		allocator_type::destroy(_Node);
+		allocator_type::deallocate(_Node);
+	}
+
+	template<class T, class Allocator>
 	list<T, Allocator>::list() {
 		_Void_Init();
 	}
@@ -69,7 +77,7 @@ namespace Miku {
 	}
 
 	template<class T, class Allocator>
-	typename Miku::list<T, Allocator>::size_type Miku::list<T, Allocator>::size() {
+	typename Miku::list<T, Allocator>::size_type Miku::list<T, Allocator>::size() noexcept {
 		int _size = 0;
 		for (iterator i = begin(); i != end(); ++i) {
 			++_size;
@@ -91,6 +99,28 @@ namespace Miku {
 	template<class T, class Allocator>
 	void list<T, Allocator>::push_front(const_reference value) {
 		insert(begin(), value);
+	}
+
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::pop_back() {
+		_Destroy(node->prev);
+	}
+
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::pop_front() {
+		_Destroy(node->next);
+	}
+
+	template<class T, class Allocator>
+	void list<T, Allocator>::clear() noexcept {
+		link_type _curr = node->next;
+		while (_curr != node) {
+			link_type temp = _curr;
+			_curr = _curr->next;
+			_Destroy(temp);
+		}
+		node->next = node;
+		node->prev = node;
 	}
 
 	template<class T, class Allocator>
@@ -118,5 +148,69 @@ namespace Miku {
 		for (; first != last; ++first)
 			insert(pos, *first);
 	}
+
+	template<class T, class Allocator>
+	typename Miku::list<T, Allocator>::iterator Miku::list<T, Allocator>::erase(iterator pos) {		
+		pos.node->prev->next = pos.node->next;
+		pos.node->next->prev = pos.node->prev;
+		link_type res = pos.node->next;
+		_Destroy(pos.node);
+		return res;
+	}
+
+	template<class T, class Allocator>
+	typename Miku::list<T, Allocator>::iterator Miku::list<T, Allocator>::erase(iterator first, iterator last) {
+		iterator res;
+		// first会被析构，所以这里first的递增不能写在for里
+		for (; first != last; )
+			res = erase(first++);
+		return res;
+	}
+
+	template<class T, class Allocator>
+	typename Miku::list<T, Allocator>::iterator Miku::list<T, Allocator>::erase(const_iterator pos) {
+		// erase(static_cast<iterator>(pos));
+		pos.node->prev->next = pos.node->next;
+		pos.node->next->prev = pos.node->prev;
+		link_type res = pos.node->next;
+		_Destroy(const_cast<Miku::Internal::_List_Node<T>*>(pos.node));
+		return res;
+	}
+
+	template<class T, class Allocator>
+	typename Miku::list<T, Allocator>::iterator Miku::list<T, Allocator>::erase(const_iterator first, const_iterator last) {
+		iterator res;
+		for (; first != last;)
+			res = erase(first++);
+		return res;
+	}
+
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::resize(size_type count, const_reference value) {
+		auto _size = size();
+		if (count < _size) {
+			while (count != _size) {
+				pop_back();
+				--_size;
+			}
+		}
+		else {
+			while (count != _size) {
+				push_back(value);
+				++_size;
+			}
+		}
+	}
+
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::swap(list& other) noexcept {
+		std::swap(node, other.node);
+	}
+
+	/*template<class T, class Allocator>
+	void Miku::list<T, Allocator>::sort() {
+
+	}*/
+
 }
 #endif // !TINYLIST_IMPL_H__

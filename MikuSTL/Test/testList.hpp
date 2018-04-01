@@ -42,8 +42,10 @@ void listTestCase2() {
 	for (auto i : _list_2)
 		assert(i == 100);
 	for (auto i = _list_2.begin(); i != _list_2.end(); ++i)
-		assert(*i == 100);
+		assert(*i == 100);	
+}
 
+void listTestCase3() {
 	// const_iterator && const iterator²âÊÔ
 	const Miku::list<int> _list_3{ 1, 2, 3 };
 	Miku::list<int>::const_iterator _iter_4 = _list_3.begin();
@@ -55,9 +57,14 @@ void listTestCase2() {
 	const Miku::list<int>::iterator _iter_5 = _list_4.begin();
 	// _iter_5++;		// error
 	*_iter_5 = 1;		// ok
+
+	Miku::list<int> _list_5{ 1, 2 };
+	Miku::list<int>::const_iterator _iter_6 = _list_5.cbegin();
+	_iter_6++;			// ok
+	// *_iter_6 = 1;	// error
 }
 
-void listTestCase3() {
+void listTestCase4() {
 	Miku::list<int> _list_1{ 1, 2 };
 	assert(_list_1.size() == 2);
 	assert(*_list_1.begin() == 1);
@@ -84,7 +91,7 @@ void listTestCase3() {
 	assert(_list_3.size() == 3);
 }
 
-void listTestCase4() {
+void listTestCase5() {
 	Miku::list<int> _list_1{ 1, 2 };
 	assert(_list_1.size() == 2);
 	_list_1.insert(_list_1.begin(), -1);
@@ -101,8 +108,77 @@ void listTestCase4() {
 	assert(*(--_list_2.end()) == -3);
 }
 
-void listTestCase5() {
-
+void listTestCase6() {
+	Miku::list<int> _list_1;
+	assert(_list_1.empty());
+	_list_1.push_back(1);
+	assert(!_list_1.empty());
+	
+	Miku::list<int> _list_2{ 1,2,3 };
+	assert(_list_2.size() == 3);
+	_list_2.clear();
+	assert(_list_2.size() == 0);	
 }
+
+void listTestCase7() {
+	Miku::list<int> _list_3{ 1,2,3 };
+	auto _iter_1 = _list_3.begin();
+	auto _iter_2 = _list_3.erase(_iter_1);
+	assert(_list_3.size() == 2);
+	assert(*(_list_3.begin()) == 2);
+	assert(_iter_2 == _list_3.begin());
+
+	Miku::list<int> _list_4{ 1,2,3 };
+	auto _iter_3 = _list_4.begin();
+	auto _iter_4 = ++_list_4.begin();
+	auto _iter_5 = _list_4.erase(_iter_3, _iter_4);
+	assert(_list_4.size() == 2);
+	assert(*_iter_5 == 2);
+
+	Miku::list<int> _list_5{ 1,2,3 };
+	auto _iter_6 = _list_5.cbegin();
+	auto _iter_7 = ++_list_5.cbegin();
+	auto _iter_8 = _list_5.erase(_iter_6, _iter_7);
+	assert(_list_5.size() == 2);
+	assert(*_iter_8 == 2);
+
+	Miku::list<int> _list_6{ 1,2,3 };
+	auto _iter_9 = _list_6.erase(_list_6.cbegin());
+	assert(_list_6.size() == 2);
+	assert(*_iter_9 == 2);
+}
+
+void listTestCase8() {
+	Miku::list<int> _list_1{ 1,2,3 };
+	_list_1.pop_back();
+	assert(_list_1.size() == 2);
+	assert(*(--_list_1.end()) == 2);
+
+	_list_1.pop_front();
+	assert(_list_1.size() == 1);
+	assert(*_list_1.begin() == 2);
+
+	Miku::list<int> _list_2{ 1,1,1 };
+	_list_2.resize(5, 1);
+	assert(_list_2.size() == 5);
+	for (auto i : _list_2)
+		assert(i == 1);
+	_list_2.resize(1);
+	assert(_list_2.size() == 1);
+	for (auto i : _list_2)
+		assert(i == 1);
+}
+
+void listTestCase9() {
+	Miku::list<int> _list_1{ 1 };
+	Miku::list<int> _list_2{ 7,8,9 };
+	_list_1.swap(_list_2);
+	assert(_list_1.size() == 3);
+	assert(_list_2.size() == 1);
+	_list_2.swap(_list_1);
+	assert(_list_1.size() == 1);
+	assert(_list_2.size() == 3);
+}
+
 
 #endif // !TESTLIST_H__

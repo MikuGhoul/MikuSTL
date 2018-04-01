@@ -30,6 +30,7 @@ void testAlloc() {
 	allocTestCase1();
 	allocTestCase2();
 	allocTestCase3();
+	allocTestCase4();
 }
 
 void testList() {
@@ -37,6 +38,11 @@ void testList() {
 	listTestCase2();
 	listTestCase3();
 	listTestCase4();
+	listTestCase5();
+	listTestCase6();
+	listTestCase7();
+	listTestCase8();
+	listTestCase9();
 }
 
 int main(int argc, char* argv[]) {
