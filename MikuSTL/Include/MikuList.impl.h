@@ -77,6 +77,26 @@ namespace Miku {
 	}
 
 	template<class T, class Allocator>
+	typename list<T, Allocator>::reference list<T, Allocator>::front() {
+		return *begin();
+	}
+
+	template<class T, class Allocator>
+	typename list<T, Allocator>::const_reference list<T, Allocator>::front() const {
+		return *begin();
+	}
+
+	template<class T, class Allocator>
+	typename list<T, Allocator>::reference list<T, Allocator>::back() {
+		return *(--end());
+	}
+
+	template<class T, class Allocator>
+	typename list<T, Allocator>::const_reference list<T, Allocator>::back() const {
+		return *(--end());
+	}
+
+	template<class T, class Allocator>
 	typename Miku::list<T, Allocator>::size_type Miku::list<T, Allocator>::size() noexcept {
 		int _size = 0;
 		for (iterator i = begin(); i != end(); ++i) {
@@ -207,10 +227,149 @@ namespace Miku {
 		std::swap(node, other.node);
 	}
 
-	/*template<class T, class Allocator>
-	void Miku::list<T, Allocator>::sort() {
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::merge(list& other) {
+		size_type _size = size();
+		auto l_beg = begin();
+		auto r_beg = other.begin();
+		auto l_end = end();
+		auto r_end = other.end();
+		for (; l_beg != l_end && r_beg != r_end; ++l_beg) {
+			if (*l_beg > *r_beg) {
+				auto temp = r_beg++;
 
-	}*/
+				l_beg.node->prev->next = temp.node;
+				temp.node->prev = l_beg.node->prev;
+				l_beg.node->prev = temp.node;
+				temp.node->next = l_beg.node;
+			}
+		}
+		if (r_beg != r_end) {
+			// 除了other list的null node的之外都要merge到this list中
+			l_end.node->prev->next = r_beg.node;
+			r_beg.node->prev = l_end.node->prev;
+			r_end.node->prev->next = l_end.node;
+			l_end.node->prev = r_end.node->prev;
+
+			// other list清空
+			r_end.node->next = r_end.node;
+			r_end.node->prev = r_end.node;
+		}
+	}
+	
+
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::sort() {
+		// TODO, 用快排或归并重写
+		// 冒泡
+		size_type _size = size();
+		for (iterator i = begin(); i != end(); ++i) {
+			iterator temp = i;
+			for (iterator j = ++temp; j != end(); ++j) {
+				if (*i > *j) {
+					std::swap(i.node->data, j.node->data);
+				}
+			}
+		}
+	}
+
+	template<class T, class Allocator>
+	template<class Compare>
+	void Miku::list<T, Allocator>::sort(Compare comp) {
+		size_type _size = size();
+		for (iterator i = begin(); i != end(); ++i) {
+			iterator temp = i;
+			for (iterator j = ++temp; j != end(); ++j) {
+				if (!comp(*i, *j)) {
+					std::swap(i.node->data, j.node->data);
+				}
+			}
+		}
+	}
+
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::splice(iterator pos, list& other) {
+		splice(pos, other, other.begin(), other.end());
+	}
+
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::splice(iterator pos, list& other, iterator it) {
+		splice(pos, other, it, other.end());
+	}
+
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::splice(iterator pos, list& other, iterator first, iterator last) {
+		// [first, last) == [first, last->prev]
+		pos.node->prev->next = first.node;
+		first.node->prev = pos.node->prev;
+		pos.node->prev = last.node->prev;
+		last.node->prev->next = pos.node;
+
+		other.node->next = last.node;
+		last.node->prev = other.node;
+	}
+
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::remove(const_reference value) {
+		// erase会_Destroy, i的递增要注意
+		for (auto i = begin(); i != end(); ) {
+			if (*i == value) {
+				erase(i++);
+				continue;
+			}
+			++i;
+		}
+	}
+
+	template<class T, class Allocator>
+	template<class UnaryPredicate>
+	void Miku::list<T, Allocator>::remove_if(UnaryPredicate p) {
+		for (auto i = begin(); i != end(); ) {
+			if (p(*i)) {
+				erase(i++);
+				continue;
+			}
+			++i;
+		}
+	}
+
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::reverse() noexcept {
+		auto _Now_Iter = end();
+
+		do {
+			auto temp = _Now_Iter.node->next;
+			_Now_Iter.node->next = _Now_Iter.node->prev;
+			_Now_Iter.node->prev = temp;
+		} while (++_Now_Iter != end());
+	}
+
+	template<class T, class Allocator>
+	void Miku::list<T, Allocator>::unique() {
+		auto i = begin();
+		auto j = ++begin();
+		for (; j != end() && i != end(); ++i, ++j) {
+			if (*i == *j) {
+				erase(j);
+				auto temp = i;
+				j = ++temp;
+			}
+		}
+	}
+
+	template<class T, class Allocator>
+	template<class BinaryPredicate>
+	void Miku::list<T, Allocator>::unique(BinaryPredicate p) {
+		auto i = begin();
+		auto j = ++begin();
+		for (; j != end() && i != end(); ++i, ++j) {
+			if (p(*i, *j)) {
+				erase(j);
+				auto temp = i;
+				j = ++temp;
+			}
+		}
+	}
 
 }
 #endif // !TINYLIST_IMPL_H__

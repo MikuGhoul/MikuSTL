@@ -1,7 +1,6 @@
 #ifndef TINYLIST_H__
 #define TINYLIST_H__
 
-#include <cstddef>
 #include "MikuAllocator.h"
 #include "MikuAllocTraits.h"
 #include "MikuIterator.h"
@@ -209,6 +208,12 @@ namespace Miku {
 		// TODO
 		// rbegin/rend, 再写个iterator就可以了
 
+		reference front();
+		const_reference front() const;
+
+		reference back();
+		const_reference back() const;
+
 		size_type size() noexcept;
 
 		bool empty() const noexcept { return node->next == node; }
@@ -244,15 +249,52 @@ namespace Miku {
 
 		void swap(list&) noexcept;
 
-		/*void merge(list&);
-		template<class Compare>
+		void merge(list&);
+		/*template<class Compare>
 		void merge(list&, Compare);*/
 
-		/*void sort();
+		void sort();
 		template<class Compare>
-		void sort(Compare comp);*/
+		void sort(Compare);
+
+		void splice(iterator, list&);
+		void splice(iterator, list&, iterator);
+		void splice(iterator, list&, iterator, iterator);
+
+		void remove(const_reference);
+		template<class UnaryPredicate>
+		void remove_if(UnaryPredicate);
+
+		void reverse() noexcept;
+
+		// 移除"连续的"重复元素
+		void unique();
+		template<class BinaryPredicate>
+		void unique(BinaryPredicate);
+
 	};
+
+	template<class T, class Allocator>
+	bool operator==(list<T, Allocator>& lhs, list<T, Allocator>& rhs) {
+		if (lhs.size() != rhs.size())
+			return false;
+		auto l_beg = lhs.begin();
+		auto r_beg = rhs.begin();
+		auto l_end = lhs.end();
+		for (; l_beg != l_end; ++l_beg, ++r_beg) {
+			if (*l_beg != *r_beg)
+				return false;
+		}
+		return true;
+	}
+
+	template<class T, class Allocator>
+	bool operator!=(list<T, Allocator>& lhs, list<T, Allocator>& rhs) {
+		return (!(lhs == rhs));
+	}
 	
+	// TODO
+	// 按字典序比较大小
 }
 
 

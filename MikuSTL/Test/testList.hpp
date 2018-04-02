@@ -180,5 +180,73 @@ void listTestCase9() {
 	assert(_list_2.size() == 3);
 }
 
+void listTestCase10() {
+	Miku::list<int> _list_1{ 4,2,1,3 };
+	Miku::list<int> _list_2{ 1,2,3,4 };
+	Miku::list<int> _list_3{ 1,2,3 };
+	_list_3.push_back(4);
+	assert(_list_1 != _list_2);
+	assert(_list_2 == _list_3);
+
+	_list_1.sort();
+	assert(_list_1 == _list_2);
+
+	Miku::list<int> _list_4{ 1, 3, 6 };
+	Miku::list<int> _list_5{ 2,4,7 };
+	_list_4.merge(_list_5);
+	Miku::list<int> _list_6{ 1,2,3,4,6,7 };
+	assert(_list_4 == _list_6);
+	assert(_list_5.size() == 0);
+}
+
+void listTestCase11() {
+	Miku::list<int> _list_1{ 1,2,3,4 };
+	Miku::list<int> _list_2{ 100, 200 };
+	auto _iter_1 = _list_1.begin();
+	auto _iter_2 = ++(++_list_1.begin());
+	assert(*_iter_1 == 1);
+	assert(*_iter_2 == 3);
+	auto _iter3 = _list_2.begin();
+	_list_2.splice(_iter3, _list_1, _iter_1, _iter_2);
+	Miku::list<int> _list_3{ 1, 2, 100, 200 };
+	assert(_list_2 == _list_3);
+	Miku::list<int> _list_4{ 3, 4 };
+	assert(_list_1 == _list_4);
+
+	Miku::list<int> _list_5{ 1, 2, 3 };
+	Miku::list<int> _list_6{ 100, 200 };
+	_list_5.splice(_list_5.begin(), _list_6);
+	Miku::list<int> _list_7{ 100,200, 1,2,3 };
+	assert(_list_5 == _list_7);
+	assert(_list_6.size() == 0);
+}
+
+void listTestCase12() {
+	Miku::list<int> _list_1{ 1,2,3,1,4,5 };
+	_list_1.remove(1);
+	Miku::list<int> _list_2{ 2,3,4,5 };
+	assert(_list_1 == _list_2);
+
+	_list_1.remove_if([](int n) {return n > 3; });
+	Miku::list<int> _list_3{ 2,3 };
+	assert(_list_1 == _list_3);
+}
+
+void listTestCase13() {
+	Miku::list<int> _list_1{ 1,2,3 };
+	assert(_list_1.front() == 1);
+	assert(_list_1.back() == 3);
+
+	_list_1.reverse();
+	Miku::list<int> _list_2{ 3,2,1 };
+	assert(_list_1 == _list_2);
+}
+
+void listTestCase14() {
+	Miku::list<int> _list_1{ 1,2,2,3,3,2,1,1,2 };
+	_list_1.unique();
+	Miku::list<int> _list_2{ 1,2,3,2,1,2 };
+	assert(_list_1 == _list_2);
+}
 
 #endif // !TESTLIST_H__

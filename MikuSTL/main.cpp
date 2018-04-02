@@ -43,6 +43,11 @@ void testList() {
 	listTestCase7();
 	listTestCase8();
 	listTestCase9();
+	listTestCase10();
+	listTestCase11();
+	listTestCase12();
+	listTestCase13();
+	listTestCase14();
 }
 
 int main(int argc, char* argv[]) {
