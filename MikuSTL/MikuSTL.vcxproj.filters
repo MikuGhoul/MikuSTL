@@ -24,9 +24,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Include\MikuVector.cpp">
-      <Filter>Implement</Filter>
-    </ClCompile>
     <ClCompile Include="Include\MikuString.cpp">
       <Filter>Implement</Filter>
     </ClCompile>
@@ -34,6 +31,9 @@
       <Filter>Implement</Filter>
     </ClCompile>
     <ClCompile Include="Include\MikuArray.cpp">
+      <Filter>Implement</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\MikuVector.impl.h">
       <Filter>Implement</Filter>
     </ClCompile>
   </ItemGroup>

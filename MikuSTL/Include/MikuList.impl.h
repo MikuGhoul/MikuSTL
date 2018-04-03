@@ -1,7 +1,5 @@
-// #include "TinyList.h"
-
-#ifndef TINYLIST_IMPL_H__
-#define TINYLIST_IMPL_H__
+#ifndef MIKU_LIST_IMPL_H__
+#define MIKU_LIST_IMPL_H__
 
 #include "MikuList.h"
 	
@@ -372,4 +370,4 @@ namespace Miku {
 	}
 
 }
-#endif // !TINYLIST_IMPL_H__
+#endif // !MIKU_LIST_IMPL_H__

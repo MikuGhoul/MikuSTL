@@ -1,5 +1,5 @@
-#ifndef TINYLIST_H__
-#define TINYLIST_H__
+#ifndef MIKU_LIST_H__
+#define MIKU_LIST_H__
 
 #include "MikuAllocator.h"
 #include "MikuAllocTraits.h"
@@ -300,5 +300,5 @@ namespace Miku {
 
 #include "MikuList.impl.h"
 
-#endif // !TINYLIST_H__
+#endif // !MIKU_LIST_H__
 

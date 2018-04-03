@@ -61,5 +61,13 @@ void allocTestCase4() {
 	Miku::allocator<Test>::destroy(p);
 }
 
+void allocTestCase5() {
+	// 没看懂标准里的可变模板构造参数
+	/*auto p = Miku::allocator<int>::allocate(3);
+	Miku::allocator<int>::construct(p, 100);
+	assert(*p == 100);
+	assert(*(p + 1) == 100);*/
+}
+
 #endif // !TESTALLOC_H__
 

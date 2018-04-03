@@ -5,6 +5,7 @@
 
 #include "Test/testAlloc.hpp"
 #include "Test/testList.hpp"
+#include "Test/testVector.hpp"
 //#include "Test/testString.hpp"
 //#include "Test/testVector.hpp"
 //#include "Test/testHeader.hpp"
@@ -16,6 +17,7 @@ void testAlloc() {
 	allocTestCase2();
 	allocTestCase3();
 	allocTestCase4();
+	allocTestCase5();
 }
 
 void testList() {
@@ -35,10 +37,19 @@ void testList() {
 	listTestCase14();
 }
 
+void testVector() {
+	vectorTestCase1();
+	vectorTestCase2();
+	vectorTestCase3();
+	vectorTestCase4();
+	vectorTestCase5();
+	vectorTestCase6();
+}
+
 void basic_test() {
-	// testString();
 	testAlloc();
 	testList();
+	testVector();
 }
 
 void performance_test() {
@@ -47,7 +58,7 @@ void performance_test() {
 
 int main(int argc, char* argv[]) {
 
-	// basic_test();
-	performance_test();
+	basic_test();
+	// performance_test();
 	return 0;
 }
