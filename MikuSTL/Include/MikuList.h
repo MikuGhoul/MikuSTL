@@ -188,7 +188,7 @@ namespace Miku {
 		list(list&);
 		list(list&&);
 		list(std::initializer_list<value_type>);
-		// ~list();
+		~list();
 
 	private:
 		link_type _New_Node();

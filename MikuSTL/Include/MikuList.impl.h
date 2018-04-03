@@ -75,6 +75,12 @@ namespace Miku {
 	}
 
 	template<class T, class Allocator>
+	list<T, Allocator>::~list() {
+		clear();
+		allocator_type::deallocate(node, 1);
+	}
+
+	template<class T, class Allocator>
 	typename list<T, Allocator>::reference list<T, Allocator>::front() {
 		return *begin();
 	}
@@ -131,6 +137,8 @@ namespace Miku {
 
 	template<class T, class Allocator>
 	void list<T, Allocator>::clear() noexcept {
+		// 被move后的list身体被掏空，你还取next？你知道node有多努力吗？你考虑过node的感受么？你没有，你只考虑你自己！
+		if (!node)	return;
 		link_type _curr = node->next;
 		while (_curr != node) {
 			link_type temp = _curr;

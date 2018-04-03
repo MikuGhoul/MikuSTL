@@ -41,21 +41,48 @@ namespace Miku {
 		}
 	}
 
+	// 委托构造
 	template<class T, class Allocator>
-	vector<T, Allocator>::vector(vector& other) {
-		vector(other.begin(), other.end());
+	vector<T, Allocator>::vector(vector& other) : vector(other.begin(), other.end()){}
+
+	template<class T, class Allocator>
+	vector<T, Allocator>::vector(vector&& other) noexcept
+		: start(other.start), finish(other.finish), end_of_storage(other.end_of_storage) {
+		other.start = other.finish = other.end_of_storage = nullptr;
+	}
+
+	// 委托构造
+	template<class T, class Allocator>
+	vector<T, Allocator>::vector(std::initializer_list<value_type> init) : vector(init.begin(), init.end()) {}
+
+	/*template<class T, class Allocator>
+	vector<T, Allocator>::~vector() {
+
+	}*/
+
+	template<class T, class Allocator>
+	typename vector<T, Allocator>::reference vector<T, Allocator>::operator[](size_type pos) {
+		return *(begin() + pos);
 	}
 
 	template<class T, class Allocator>
-	vector<T, Allocator>::vector(vector&& other) noexcept {
-
+	typename vector<T, Allocator>::const_reference vector<T, Allocator>::operator[](size_type pos) const {
+		return  *(begin() + pos);
 	}
 
 	template<class T, class Allocator>
-	vector<T, Allocator>::vector(std::initializer_list<value_type> init) {
-
+	typename vector<T, Allocator>::reference vector<T, Allocator>::at(size_type pos) {
+		if (pos >= size())
+			throw std::out_of_range("out of range.");
+		return operator[](pos);
 	}
 
+	template<class T, class Allocator>
+	typename vector<T, Allocator>::const_reference vector<T, Allocator>::at(size_type pos) const {
+		if (pos >= size())
+			throw std::out_of_range("out of range.");
+		return operator[](pos);
+	}
 
 }
 

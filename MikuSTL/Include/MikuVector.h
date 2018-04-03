@@ -4,6 +4,7 @@
 #include "MikuAllocator.h"
 #include "MikuAllocTraits.h"
 #include "MikuIterator.h"
+#include <stdexcept>
 
 
 namespace Miku {
@@ -23,6 +24,7 @@ namespace Miku {
 
 		// vector的iterator用指针就可以了(和list对比)，以后algorithm用的时候，通过allocator_traits特化一个指针的版本
 		using iterator = T * ;
+		using const_iterator = const T * ;
 
 	private:
 		iterator start;
@@ -39,17 +41,37 @@ namespace Miku {
 		vector(vector&);
 		vector(vector&&) noexcept;
 		vector(std::initializer_list<value_type>);
+		// ~vector();
 
 	private:
 		pointer _New_Node();
 		pointer _New_Node(size_type, const_reference);
 
 	public:
-		
+		reference operator[](size_type);
+		const_reference operator[](size_type) const;
+
+		reference at(size_type);
+		const_reference at(size_type) const;
+
+		reference front() { return *start; }
+		const_reference front() const { return *start; }
+
+		reference back() { return *(finish - 1); }
+		const_reference back() const { return *(finish - 1); }
+
+		pointer data() noexcept { return start; }
+		const_pointer data() const noexcept { return start; }
 
 		iterator begin() noexcept { return start; }
+		const_iterator begin() const noexcept { return start; }
+		const_iterator cbegin() const noexcept { return start; }
 
 		iterator end() noexcept { return finish; }
+		const_iterator end() const noexcept { return finish; }
+		const_iterator cend() const noexcept { return finish; }
+
+		bool empty() const noexcept { return start == finish; }
 
 		size_type size() const noexcept { return finish - start; }
 
