@@ -4,6 +4,7 @@
 #include "MikuAllocator.h"
 #include "MikuAllocTraits.h"
 #include "MikuIterator.h"
+#include <memory>
 #include <stdexcept>
 
 
@@ -46,6 +47,20 @@ namespace Miku {
 	private:
 		pointer _New_Node();
 		pointer _New_Node(size_type, const_reference);
+		void _Move_Back(iterator, iterator, size_type);
+		iterator _Ctor_Range(iterator, size_type, const_reference);
+		template<class InputIt>
+		iterator _Ctor_Range(iterator, InputIt, InputIt,
+			typename std::enable_if<!std::is_integral<InputIt>::value>::type* = nullptr);
+		iterator _Copy_Range(iterator, iterator, iterator);
+		void _Dest_Range(iterator, iterator);
+		size_type _Calc_Growth(size_type);
+		iterator _Insert_Aux(iterator, size_type, const_reference);
+		template<class InputIt>
+		iterator _Insert_Aux(iterator, InputIt, InputIt,
+			typename std::enable_if<!std::is_integral<InputIt>::value>::type* = nullptr);
+		
+
 
 	public:
 		reference operator[](size_type);
@@ -76,6 +91,16 @@ namespace Miku {
 		size_type size() const noexcept { return finish - start; }
 
 		size_type capacity() const noexcept { return end_of_storage - start; }
+
+		iterator insert(iterator, const_reference);
+		void insert(iterator, size_type, const_reference);
+		template<class InputIt>
+		void insert(iterator, InputIt, InputIt,
+			typename std::enable_if<!std::is_integral<InputIt>::value>::type* = nullptr);
+		iterator insert(const_iterator, std::initializer_list<value_type>);
+
+		void push_back(const_reference);
+		void push_back(value_type&&);
 
 	};
 	

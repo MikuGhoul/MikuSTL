@@ -60,10 +60,24 @@ void vectorTestCase4() {
 }
 
 void vectorTestCase5() {
+	Miku::vector<int> _vec_1{ 1,2,3 };
+	assert(_vec_1.size() == 3);
+	assert(_vec_1.capacity() == 3);
+	_vec_1.insert(_vec_1.begin(), 1, 6);
+	assert(_vec_1.size() == 4);
+	assert(_vec_1.capacity() == 6);
+
+	Miku::vector<int> _vec_2{ 1,2,3 };
+	/*auto _iter_1 = _vec_2.insert(_vec_2.begin(), 100);
+	std::cout << *_iter_1 << std::endl;*/
 
 }
 
 void vectorTestCase6() {
+	Miku::vector<int> _vec_1{ 1,2,3 };
+	_vec_1.push_back(7);
+	assert(*(_vec_1.end() - 1) == 7);
+
 
 }
 
