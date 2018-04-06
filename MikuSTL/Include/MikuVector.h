@@ -47,13 +47,9 @@ namespace Miku {
 	private:
 		pointer _New_Node();
 		pointer _New_Node(size_type, const_reference);
-		void _Move_Back(iterator, iterator, size_type);
 		iterator _Ctor_Range(iterator, size_type, const_reference);
-		template<class InputIt>
-		iterator _Ctor_Range(iterator, InputIt, InputIt,
-			typename std::enable_if<!std::is_integral<InputIt>::value>::type* = nullptr);
-		iterator _Copy_Range(iterator, iterator, iterator);
-		void _Dest_Range(iterator, iterator);
+		void _Dtor_Range(iterator, iterator);
+		void _Dest_All(iterator, iterator);
 		size_type _Calc_Growth(size_type);
 		iterator _Insert_Aux(iterator, size_type, const_reference);
 		template<class InputIt>
@@ -63,6 +59,9 @@ namespace Miku {
 
 
 	public:
+		vector& operator=(const vector&);
+		vector& operator=(vector&&) noexcept;
+
 		reference operator[](size_type);
 		const_reference operator[](size_type) const;
 
@@ -92,6 +91,19 @@ namespace Miku {
 
 		size_type capacity() const noexcept { return end_of_storage - start; }
 
+		// 增加 end_of_storage - finish
+		void reserve(size_type);
+
+		// 析构 finish - start. end_of_storage不变
+		void clear() noexcept;
+
+		// 使 end_of_storage 减少到 finish
+		void shrink_to_fit();
+
+		// 第一个参数大于size(), 则以第二个参数的值扩充
+		// 第一个参数小于size(), 则析构多余的部分
+		void resize(size_type, const_reference = value_type());
+
 		iterator insert(iterator, const_reference);
 		void insert(iterator, size_type, const_reference);
 		template<class InputIt>
@@ -99,10 +111,35 @@ namespace Miku {
 			typename std::enable_if<!std::is_integral<InputIt>::value>::type* = nullptr);
 		iterator insert(const_iterator, std::initializer_list<value_type>);
 
+		iterator erase(iterator);
+		iterator erase(iterator, iterator);
+
 		void push_back(const_reference);
 		void push_back(value_type&&);
 
+		void pop_back();
+
+		void swap(vector&) noexcept;
 	};
+
+	template<class T, class Allocator>
+	bool operator==(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs) {
+		if (lhs.size() != rhs.size())
+			return false;
+		auto l_beg = lhs.begin();
+		auto r_beg = rhs.begin();
+		auto l_end = lhs.end();
+		for (; l_beg != l_end; ++l_beg, ++r_beg) {
+			if (*l_beg != *r_beg)
+				return false;
+		}
+		return true;
+	}
+
+	template<class T, class Allocator>
+	bool operator!=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs) {
+		return (!(lhs == rhs));
+	}
 	
 }
 

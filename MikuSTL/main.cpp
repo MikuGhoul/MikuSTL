@@ -44,6 +44,12 @@ void testVector() {
 	vectorTestCase4();
 	vectorTestCase5();
 	vectorTestCase6();
+	vectorTestCase7();
+	vectorTestCase8();
+	vectorTestCase9();
+	vectorTestCase10();
+	vectorTestCase11();
+	vectorTestCase12();
 }
 
 void basic_test() {
