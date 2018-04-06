@@ -156,9 +156,11 @@
     <ClInclude Include="Test\testAlloc.hpp" />
     <ClInclude Include="Test\testHeader.hpp" />
     <ClInclude Include="Test\testList.hpp" />
+    <ClInclude Include="Test\TestListPerformance.hpp" />
     <ClInclude Include="Test\testString.hpp" />
     <ClInclude Include="Test\testVector.hpp" />
     <ClInclude Include="Include\MikuVector.h" />
+    <ClInclude Include="Test\TestVectorPerformance.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -74,6 +74,12 @@
     <ClInclude Include="Include\MikuAllocator.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Test\TestListPerformance.hpp">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\TestVectorPerformance.hpp">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
