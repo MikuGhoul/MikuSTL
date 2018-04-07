@@ -6,6 +6,7 @@
 #include "Test/testAlloc.hpp"
 #include "Test/testList.hpp"
 #include "Test/testVector.hpp"
+#include "Test/testArray.hpp"
 //#include "Test/testString.hpp"
 //#include "Test/testVector.hpp"
 //#include "Test/testHeader.hpp"
@@ -53,20 +54,30 @@ void testVector() {
 	vectorTestCase12();
 }
 
+void testArray() {
+	arrayTestCase1();
+	arrayTestCase2();
+	arrayTestCase3();
+	arrayTestCase4();
+	arrayTestCase5();
+}
+
 void basic_test() {
 	testAlloc();
 	testList();
 	testVector();
+	testArray();
 }
 
 void performance_test() {
 	// list_test();
-	vector_test();
+	// vector_test();
+
 }
 
 int main(int argc, char* argv[]) {
 
-	// basic_test();
-	performance_test();
+	basic_test();
+	// performance_test();
 	return 0;
 }

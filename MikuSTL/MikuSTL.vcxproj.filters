@@ -30,10 +30,10 @@
     <ClCompile Include="Include\MikuList.impl.h">
       <Filter>Implement</Filter>
     </ClCompile>
-    <ClCompile Include="Include\MikuArray.cpp">
+    <ClCompile Include="Include\MikuVector.impl.h">
       <Filter>Implement</Filter>
     </ClCompile>
-    <ClCompile Include="Include\MikuVector.impl.h">
+    <ClCompile Include="Include\MikuArray.impl.h">
       <Filter>Implement</Filter>
     </ClCompile>
   </ItemGroup>
@@ -78,6 +78,9 @@
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="Test\TestVectorPerformance.hpp">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\testArray.hpp">
       <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
