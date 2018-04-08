@@ -140,7 +140,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Include\MikuArray.impl.h" />
     <ClCompile Include="Include\MikuList.impl.h" />
     <ClCompile Include="Include\MikuString.cpp" />
     <ClCompile Include="Include\MikuVector.impl.h" />
@@ -150,11 +149,14 @@
     <ClInclude Include="Include\MikuAllocator.h" />
     <ClInclude Include="Include\MikuAllocTraits.h" />
     <ClInclude Include="Include\MikuArray.h" />
+    <ClInclude Include="Include\MikuDeque.h" />
+    <ClInclude Include="Include\MikuDeque.impl.h" />
     <ClInclude Include="Include\MikuIterator.h" />
     <ClInclude Include="Include\MikuList.h" />
     <ClInclude Include="Include\MikuString.h" />
     <ClInclude Include="Test\testAlloc.hpp" />
     <ClInclude Include="Test\testArray.hpp" />
+    <ClInclude Include="Test\testDeque.hpp" />
     <ClInclude Include="Test\testHeader.hpp" />
     <ClInclude Include="Test\testList.hpp" />
     <ClInclude Include="Test\TestListPerformance.hpp" />

@@ -90,7 +90,5 @@ namespace Miku {
 
 }
 
-#include "MikuArray.impl.h"
-
 #endif // !MIKU_ARRAY_H__
 

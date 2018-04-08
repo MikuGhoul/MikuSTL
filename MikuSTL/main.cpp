@@ -7,6 +7,7 @@
 #include "Test/testList.hpp"
 #include "Test/testVector.hpp"
 #include "Test/testArray.hpp"
+#include "Test/testDeque.hpp"
 //#include "Test/testString.hpp"
 //#include "Test/testVector.hpp"
 //#include "Test/testHeader.hpp"
@@ -62,11 +63,22 @@ void testArray() {
 	arrayTestCase5();
 }
 
+void testDeque() {
+	dequeTestCase1();
+	dequeTestCase2();
+	dequeTestCase3();
+	dequeTestCase4();
+	dequeTestCase5();
+	dequeTestCase6();
+	dequeTestCase7();
+}
+
 void basic_test() {
 	testAlloc();
 	testList();
 	testVector();
 	testArray();
+	testDeque();
 }
 
 void performance_test() {

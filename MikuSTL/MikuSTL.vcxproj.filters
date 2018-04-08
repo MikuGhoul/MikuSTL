@@ -33,9 +33,6 @@
     <ClCompile Include="Include\MikuVector.impl.h">
       <Filter>Implement</Filter>
     </ClCompile>
-    <ClCompile Include="Include\MikuArray.impl.h">
-      <Filter>Implement</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Test\testString.hpp">
@@ -81,6 +78,15 @@
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="Test\testArray.hpp">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MikuDeque.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MikuDeque.impl.h">
+      <Filter>Implement</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\testDeque.hpp">
       <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>

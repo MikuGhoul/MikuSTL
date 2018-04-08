@@ -42,7 +42,7 @@ namespace Miku {
 		vector(vector&);
 		vector(vector&&) noexcept;
 		vector(std::initializer_list<value_type>);
-		// ~vector();
+		~vector();
 
 	private:
 		pointer _New_Node();

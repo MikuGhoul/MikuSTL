@@ -83,10 +83,12 @@ namespace Miku {
 	template<class T, class Allocator>
 	vector<T, Allocator>::vector(std::initializer_list<value_type> init) : vector(init.begin(), init.end()) {}
 
-	/*template<class T, class Allocator>
+	template<class T, class Allocator>
 	vector<T, Allocator>::~vector() {
-
-	}*/
+		clear();
+		// shrink_to_fit();
+		allocator_type::deallocate(start, size());
+	}
 
 
 	template<class T, class Allocator>
