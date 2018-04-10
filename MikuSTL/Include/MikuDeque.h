@@ -7,13 +7,18 @@
 
 namespace Miku {
 
+	template<class T, class Allocator>
+	class deque;
+
 	namespace Internal {
 
 		template<class T>
 		class _Deque_Iterator {
+			template<class T, class Allocator>
+			friend class deque;
 
 		public:
-			using iterator_category = typename Miku::bidirectional_iterator_tag;
+			using iterator_category = typename std::random_access_iterator_tag;
 			using value_type = T;
 			using pointer = T * ;
 			using reference = T & ;
@@ -25,13 +30,6 @@ namespace Miku {
 
 			using map_pointer = pointer * ;
 
-		public:
-			pointer _B_First;		// buffer的头
-			pointer _B_Last;		// buffer的尾的后一个元素
-			pointer _B_Cur;			// 当前元素在buffer的位置
-
-			map_pointer _B_Node;	// buffer在map的位置
-
 			// TODO，没有设计好抽象策略...
 			// buffer长度分配策略
 			// 1. 指定为不为零的_Size
@@ -40,6 +38,13 @@ namespace Miku {
 			static size_type _Deque_Buffer_Size(size_type _Size = 0) {
 				return _Size != 0 ? _Size : (sizeof(T) < 512 ? 512 / sizeof(T) : 1);
 			}
+
+		private:
+			pointer _B_First;		// iterator所在的buffer的头
+			pointer _B_Last;		// iterator所在的buffer的尾的后一个元素
+			pointer _B_Cur;			// iterator在当前buffer中的位置
+
+			map_pointer _B_Node;	// iterator所在的buffer在map的位置
 
 		private:
 			void _Set_Node(map_pointer);
@@ -58,7 +63,7 @@ namespace Miku {
 			self operator++(int);
 			self& operator--();
 			self operator--(int);
-			difference_type operator-(const_reference) const;
+			difference_type operator-(const self&) const;
 
 		};
 
@@ -95,6 +100,7 @@ namespace Miku {
 	private:
 		// start和finish是有数据的buffer的头尾，不是map的头尾
 		iterator start;
+		// finish这里不是右开区间. [start, finish]
 		iterator finish;
 		map_pointer map;
 		size_type mapSize;
@@ -113,14 +119,19 @@ namespace Miku {
 	private:
 		pointer _New_Buffer();
 		map_pointer _New_Map(const size_type);
-		void _Init_Map();
+
+		// 初始化map，参数表示element（不是buffer）个数，默认值为零个
+		// 目前的设计是，deque最少包含_Min_Buffer_Count个buffer，每个buffer最少iterator::_Deque_Buffer_Size()个element
+		void _Init_Map(size_type = 0);
+		// 每个deque中最少的buffer数
+		static size_type _Min_Buffer_Count() { return 4; }
 
 	public:
 		iterator begin() { return start; }
 
 		iterator end() { return finish; }
 
-		size_type size() const noexcept { return end() - begin(); }
+		size_type size() noexcept { return end() - begin(); }
 
 		bool empty() const noexcept { return begin() == end(); }
 	};

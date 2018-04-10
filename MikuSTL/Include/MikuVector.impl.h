@@ -152,7 +152,7 @@ namespace Miku {
 			// pos后的个数大于count，此时pos后有的直接copy assignment，有的需要uninitialized_copy(copy ctor)
 			if (finish - pos > count) {
 				// TODO
-				// 以后用自己的algorithm替换
+				// 以后用自己的 <memory> 或 <algorithm>替换
 
 				// 1. 移动pos后的倒数count个空间(old)
 				std::uninitialized_copy(finish - count, finish, finish);	// copy ctor
@@ -161,8 +161,7 @@ namespace Miku {
 				std::copy_backward(pos, finish - count, finish);			// 第三个参数是末位
 
 				// 3. "copy assignemnt" count个空间 (new)
-				for (auto i = 0; i != count; ++i)
-					*(pos + i) = value;
+				std::fill_n(pos, count, value);
 
 			}
 			// pos后的个数小于等于count，此时pos后的直接uninitialized_copy
@@ -172,12 +171,10 @@ namespace Miku {
 				std::uninitialized_copy(pos, finish, pos + count);
 
 				// 2. "copy assignment" count的前finish - pos个(new)
-				for (auto i = pos; i != finish; ++i)
-					*i = value;
+				std::fill_n(pos, finish - pos, value);
 
 				// 3. "copy ctor" count剩余的部分(new)
-				for (auto i = 0; i != count - (finish - pos); ++i)
-					allocator_type::construct(finish + i, value);
+				std::uninitialized_fill_n(finish, count - (finish - pos), value);
 				
 			}
 			finish += count;
