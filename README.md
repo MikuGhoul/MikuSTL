@@ -29,7 +29,7 @@
 
 
 #### 进度备忘
-* deque的那个模板构造里uninitialized_copy会失败，已经找到原因了，uninitialized_copy实现里要求random_access_iterator_tag(...说起来traits又是一阵心疼)和operator+
+* deque的clear完事了，主要后面push_back啥的溢出后重申请内存用...
 
 #### 挖的坑
 * 自己的Iterator_Traits目前废了，在用std的

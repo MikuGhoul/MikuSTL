@@ -61,6 +61,11 @@ namespace Miku {
 			p->~value_type();
 		}
 
+		static void destroy(pointer first, pointer last) {
+			for (; first != last; ++first)
+				first->~value_type();
+		}
+
 
 	};
 
