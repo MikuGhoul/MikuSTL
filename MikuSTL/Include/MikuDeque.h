@@ -183,15 +183,26 @@ namespace Miku {
 
 	private:
 		pointer _New_Buffer();
+
 		map_pointer _New_Map(const size_type);
 
 		// 初始化map，参数表示element（不是buffer）个数，默认值为零个
 		// 目前的设计是，deque最少包含_Min_Buffer_Count个buffer，每个buffer最少iterator::_Deque_Buffer_Size()个element
 		void _Init_Map(size_type = 0);
+		
+		void _Push_Front_Aux(size_type);
+
+		void _Push_Back_Aux(size_type);
+
+		void _Map_Growth();
+
+		iterator Insert_Aux(iterator, const_reference);
+
 		// 每个deque中最少的buffer数
 		static size_type _Min_Buffer_Count() { return 4; }
 
 	public:
+
 		iterator begin() noexcept { return start; }
 		const_iterator begin() const noexcept { return start; }
 		const_iterator cbegin() const noexcept { return start; }
@@ -216,15 +227,22 @@ namespace Miku {
 
 		bool empty() const noexcept { return begin() == end(); }
 
+		void push_front(const_reference);
+		void push_front(value_type&&);
+
+		void pop_front();
+
 		void push_back(const_reference);
 		void push_back(value_type&&);
 
 		void pop_back();
 
-		void push_front(const_reference);
-		void push_front(value_type&&);
-
-		void pop_front();
+		iterator insert(iterator, const_reference);
+		void insert(iterator, size_type, const_reference);
+		template<class InputIt>
+		void insert(iterator, InputIt, InputIt,
+			typename std::enable_if<!std::is_integral<InputIt>::value>::type* = nullptr);
+		iterator insert(const_iterator, std::initializer_list<value_type>);
 
 		void clear() noexcept;
 

@@ -5,6 +5,7 @@
 #### 已完成
 * list
 * vector
+* array
 
 #### 性能测试
 
@@ -29,7 +30,7 @@
 
 
 #### 进度备忘
-* deque的clear完事了，主要后面push_back啥的溢出后重申请内存用...
+* deque的insert怎么做边界检测？可以用_Map_Growth()吗？
 
 #### 挖的坑
 * 自己的Iterator_Traits目前废了，在用std的
@@ -38,3 +39,4 @@
 * [const_]reverse_iterator（我感觉我大概率不会添这个坑...
 * 用SFINAE实现的区分重载函数写的有点不优雅（TODO写在MikuList.h了）？
 * 测试数据有点弱（能跑就行...(掀桌 ︵┻━┻
+* list内存泄漏了？

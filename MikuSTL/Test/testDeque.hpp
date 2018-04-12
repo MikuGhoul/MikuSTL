@@ -80,10 +80,99 @@ void dequeTestCase5() {
 }
 
 void dequeTestCase6() {
+	/*Miku::deque<int> _deq_1(128 * 4, 2);
+	std::cout << _deq_1.back_full() << std::endl;
+	std::cout << _deq_1.front_full() << std::endl;*/
+
+	Miku::deque<int> _deq_1{ 1,2,3 };
+	assert(_deq_1.size() == 3);
+
+	_deq_1.push_back(47);
+	assert(_deq_1.size() == 4);
+	assert(_deq_1.back() == 47);
+
+	_deq_1.push_front(17);
+	assert(_deq_1.size() == 5);
+	assert(_deq_1.front() == 17);
+
+	_deq_1.pop_back();
+	assert(_deq_1.size() == 4);
+	assert(_deq_1.back() == 3);
+
+	_deq_1.pop_front();
+	assert(_deq_1.size() == 3);
+	assert(_deq_1.front() == 1);
 
 }
 
 void dequeTestCase7() {
+	Miku::deque<int> _deq_1;
+	
+	// 好像也没法子显示测试，下面这个几句话可以打断点，看内存数据变化
+	// 之所以127， 129这些是因为int会导致buffer长度为128
+
+	// 目前的设计，这里push_front() 会申请一个buffer
+	for (int i = 0; i != 127; ++i)
+		_deq_1.push_front(1);
+	assert(_deq_1.size() == 127);
+
+	// 再push_front()后会填满新buffer，而且这个buffer是map的第一个buffer
+	_deq_1.push_front(1);
+	assert(_deq_1.size() == 128);
+
+	// 再push_front()，会重新申请一个二倍空间的map
+	_deq_1.push_front(1);
+	assert(_deq_1.size() == 129);	
+}
+
+void dequeTestCase8() {
+	Miku::deque<int> _deq_1;
+
+	// 这128个都是buffer未满时构造的
+	for (int i = 0; i != 128; ++i)
+		_deq_1.push_back(1);
+	assert(_deq_1.size() == 128);
+
+	// 这个会导致 new 一个新 buffer
+	_deq_1.push_back(1);
+	assert(_deq_1.size() == 129);
+
+	// 下面会把map中的最后一个buffer都push满
+	// 默认mapSize为4，设计是从map[1]开始构造buffer，所以push_back满需要3个buffer
+	for (int i = 0; i != 127 + 128; ++i)
+		_deq_1.push_back(1);
+	assert(_deq_1.size() == 129 + 127 + 128);
+
+	// 此时会重新申请一个二倍空间的map
+	_deq_1.push_back(1);
+	assert(_deq_1.size() == 129 + 127 + 128 + 1);
+
+}
+
+void dequeTestCase9() {
+	Miku::deque<int> _deq_1{ 1,2,3 };
+
+	auto _iter_1 = _deq_1.insert(_deq_1.begin(), 0);
+	assert(_deq_1.size() == 4);
+	assert(_deq_1.front() == 0);
+	assert(*_iter_1 == 0);
+
+	auto _iter_2 = _deq_1.insert(_deq_1.end(), 4);
+	assert(_deq_1.size() == 5);
+	assert(_deq_1.back() == 4);
+	assert(*_iter_2 == 4);
+
+}
+
+void dequeTestCase10() {
+
+}
+
+void dequeTestCase11() {
+
+}
+
+void dequeTestCase12() {
 
 }
 

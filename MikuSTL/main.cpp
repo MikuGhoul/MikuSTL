@@ -71,6 +71,11 @@ void testDeque() {
 	dequeTestCase5();
 	dequeTestCase6();
 	dequeTestCase7();
+	dequeTestCase8();
+	dequeTestCase9();
+	dequeTestCase10();
+	dequeTestCase11();
+	dequeTestCase12();
 }
 
 void basic_test() {

@@ -195,10 +195,12 @@ namespace Miku {
 
 	template<class T, class Allocator>
 	typename deque<T, Allocator>::map_pointer deque<T, Allocator>::_New_Map(const size_type _Map_Size) {
-		map_pointer _N_map = Miku::allocator<pointer>::allocate(_Map_Size);
+		/*map_pointer _N_map = Miku::allocator<pointer>::allocate(_Map_Size);
 		for (int i = 0; i != _Map_Size; ++i)
 			_N_map[i] = _New_Buffer();
-		return _N_map;
+		return _N_map;*/
+		// 重构了一下，初始不会立刻申请mapSize个数的buffer
+		return Miku::allocator<pointer>::allocate(_Map_Size);
 	}
 
 	template<class T, class Allocator>
@@ -209,11 +211,18 @@ namespace Miku {
 		
 		// +2是因为后面start和finish的位置要尽量靠map的中间部分
 		mapSize = std::max(_Min_Buffer_Count(), _Buffer_Count + 2);
+
+		// 先申请map，没有任何buffer
 		map = _New_Map(mapSize);
 
 		// start和finish尽量对称分配在map的两侧
 		map_pointer _Tmp_start = map + (mapSize - _Buffer_Count) / 2;
 		map_pointer _Tmp_finish = _Tmp_start + _Buffer_Count - 1;
+
+		// 只申请start到finish之间的buffer，不会申请mapSize个buffer，节省内存
+		for (auto i = _Tmp_start; i <= _Tmp_finish; ++i)
+			*i = _New_Buffer();
+
 
 		// _Set_Node可以方便控制_B_First和_B_Last
 		start._Set_Node(_Tmp_start);
@@ -221,6 +230,45 @@ namespace Miku {
 
 		start._B_Cur = start._B_First;
 		finish._B_Cur = finish._B_First + _Element_Size % iterator::_Deque_Buffer_Size();
+	}
+
+	template<class T, class Allocator>
+	void deque<T, Allocator>::_Push_Front_Aux(size_type value) {
+		*(start._B_Node - 1) = _New_Buffer();
+		start._Set_Node(start._B_Node - 1);
+		start._B_Cur = start._B_Last - 1;
+		allocator_type::construct(start._B_Cur, value);
+	}
+
+	template<class T, class Allocator>
+	void deque<T, Allocator>::_Push_Back_Aux(size_type value) {
+		*(finish._B_Node + 1) = _New_Buffer();
+		finish._Set_Node(finish._B_Node + 1);
+		finish._B_Cur = finish._B_First + 1;
+		allocator_type::construct(finish._B_Cur - 1, value);
+	}
+
+	template<class T, class Allocator>
+	void deque<T, Allocator>::_Map_Growth() {
+		size_type _Old_Buf_Count = finish._B_Node - start._B_Node + 1;
+
+		// 类似vector, 重新申请2倍空间
+		mapSize *= 2;
+		auto _new_map = _New_Map(mapSize);
+
+		// old map 放在 new map 的中间，只考虑old map中有buffer的部分就好了
+		map_pointer _Tmp_start = _new_map + (mapSize - _Old_Buf_Count) / 2;
+
+		// 仅调整所有指向buffer的指针，实际element不进行拷贝
+		for (int i = 0; i != _Old_Buf_Count; ++i)
+			*(_Tmp_start + i) = *(start._B_Node + i);
+
+		start._Set_Node(_Tmp_start);
+		finish._Set_Node(_Tmp_start + _Old_Buf_Count - 1);
+
+		Miku::allocator<pointer>::deallocate(map);
+
+		map = _new_map;
 	}
 
 	template<class T, class Allocator>
@@ -293,34 +341,127 @@ namespace Miku {
 	}
 
 	template<class T, class Allocator>
-	void deque<T, Allocator>::push_back(const_reference value) {
-
-	}
-
-	template<class T, class Allocator>
-	void deque<T, Allocator>::push_back(value_type&& value) {
-
-	}
-
-	template<class T, class Allocator>
-	void deque<T, Allocator>::pop_back() {
-
-	}
-
-	template<class T, class Allocator>
 	void deque<T, Allocator>::push_front(const_reference value) {
+		// 1. start所在的buffer满了（也不一定满，比如finish和start在一个buffer就可以不满，这里就是指不能往前push了
+		if (start._B_Cur == start._B_First) {
+			// 1.1 满了的这个buffer是map的第一个buffer
+			if (start._B_Node == map) {
+				/* map空间二倍增长 */
+				_Map_Growth();
 
+				/* 再push就有空间了 */
+				_Push_Front_Aux(value);
+			}
+			// 1.2 不是第一个buffer
+			else {
+				/* 申请一个buffer给map中的前一个节点，start移过去 */
+				_Push_Front_Aux(value);
+			}
+		}
+		// 2. 当前buffer未满，直接构造
+		else {
+			--start;
+			allocator_type::construct(start._B_Cur, value);
+		}
 	}
 
 	template<class T, class Allocator>
 	void deque<T, Allocator>::push_front(value_type&& value) {
-
+		push_front(value);
 	}
 
 	template<class T, class Allocator>
 	void deque<T, Allocator>::pop_front() {
+		allocator_type::destroy(start._B_Cur);
+		++start;
+	}
+
+	template<class T, class Allocator>
+	void deque<T, Allocator>::push_back(const_reference value) {
+		// 思路和push_front一样
+		if (finish._B_Cur == finish._B_Last) {
+			if (finish._B_Node == map + mapSize - 1) {
+
+				_Map_Growth();
+
+				_Push_Back_Aux(value);
+
+			}
+			else {
+				_Push_Back_Aux(value);
+			}
+		}
+		else {
+			allocator_type::construct(finish._B_Cur, value);
+
+			// finish._B_Cur 如果是最后一个element，避免自增的重载里会切换到下一个buffer
+			if (finish._B_Cur == finish._B_Last - 1)
+				++finish._B_Cur;
+			else
+				++finish;
+		}
+	}
+
+	template<class T, class Allocator>
+	void deque<T, Allocator>::push_back(value_type&& value) {
+		push_back(value);
+	}
+
+	template<class T, class Allocator>
+	void deque<T, Allocator>::pop_back() {
+		--finish;
+		allocator_type::destroy(finish._B_Cur);
+	}
+
+	template<class T, class Allocator>
+	typename deque<T, Allocator>::iterator deque<T, Allocator>::Insert_Aux(iterator pos, const_reference value) {
+		
+		difference_type _pos_index = pos - start;
+
+		// pos 更靠近 start
+		if (_pos_index < size() / 2) {
+
+		}
+		// pos 更靠近 finish
+		else {
+
+		}
+
+		return start;
 
 	}
+
+	template<class T, class Allocator>
+	typename deque<T, Allocator>::iterator deque<T, Allocator>::insert(iterator pos, const_reference value) {
+		if (pos._B_Cur == start._B_Cur) {
+			push_front(value);
+			return start;
+		}
+		else if (pos._B_Cur == finish._B_Cur) {
+			push_back(value);
+			return finish - 1;
+		}
+		else
+			return Insert_Aux(pos, value);
+	}
+
+	template<class T, class Allocator>
+	void deque<T, Allocator>::insert(iterator pos, size_type count, const_reference value) {
+
+	}
+
+	template<class T, class Allocator>
+	template<class InputIt>
+	void deque<T, Allocator>::insert(iterator pos, InputIt first, InputIt last,
+		typename std::enable_if<!std::is_integral<InputIt>::value>::type*) {
+
+	}
+
+	template<class T, class Allocator>
+	typename deque<T, Allocator>::iterator deque<T, Allocator>::insert(const_iterator pos, std::initializer_list<value_type> ilist) {
+
+	}
+
 
 	template<class T, class Allocator>
 	void deque<T, Allocator>::clear() noexcept {
