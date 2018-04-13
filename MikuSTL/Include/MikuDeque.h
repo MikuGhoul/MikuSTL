@@ -189,6 +189,10 @@ namespace Miku {
 		// 初始化map，参数表示element（不是buffer）个数，默认值为零个
 		// 目前的设计是，deque最少包含_Min_Buffer_Count个buffer，每个buffer最少iterator::_Deque_Buffer_Size()个element
 		void _Init_Map(size_type = 0);
+
+		// void _Start_Move_Left();
+
+		// void _Finish_Move_Right();
 		
 		void _Push_Front_Aux(size_type);
 
@@ -196,7 +200,12 @@ namespace Miku {
 
 		void _Map_Growth();
 
+		void _Insert_Start_Aux(size_type, const_reference);
+
+		void _Insert_Finish_Aux(size_type, const_reference);
+
 		iterator Insert_Aux(iterator, const_reference);
+		iterator Insert_Aux(iterator, size_type, const_reference);
 
 		// 每个deque中最少的buffer数
 		static size_type _Min_Buffer_Count() { return 4; }

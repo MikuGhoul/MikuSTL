@@ -232,6 +232,8 @@ namespace Miku {
 		finish._B_Cur = finish._B_First + _Element_Size % iterator::_Deque_Buffer_Size();
 	}
 
+
+
 	template<class T, class Allocator>
 	void deque<T, Allocator>::_Push_Front_Aux(size_type value) {
 		*(start._B_Node - 1) = _New_Buffer();
@@ -432,6 +434,64 @@ namespace Miku {
 	}
 
 	template<class T, class Allocator>
+	typename deque<T, Allocator>::iterator deque<T, Allocator>::Insert_Aux(iterator pos, size_type count, const_reference value) {
+
+		difference_type _pos_index = pos - start;
+
+		// 1. pos 更靠近 start
+		if (_pos_index < size() / 2) {
+			// 1.1 start所在buffer前面的空位数不少于count
+			if (start._B_Cur - start._B_First >= count) {
+				// 1.1.1 [start._B_Cur, pos)的长度大于count
+				if (pos - start._B_Cur > count) {
+
+					// 1.1.1.1 移动pos前的前count个空间 (old数据)
+					std::uninitialized_copy_n(start._B_Cur, count, start._B_Cur - count);
+
+					// 1.1.1.2 移动pos前的剩余部分(old)
+					std::copy(start._B_Cur + count, pos, start._B_Cur);
+
+					// 1.1.1.3 copy assignment count个空间(new)
+					std::fill_n(pos - count, count, value);
+
+				}
+				// 1.1.2 [start._B_Cur, pos)的长度小于等于count
+				else {
+
+					// 1.1.2.1 移动pos前的全部空间 (old)
+					std::uninitialized_copy(start._B_Cur, pos, start._B_Cur - count);
+
+					// 1.1.2.2 copy ctor count的前 start._B_Cur - pos 个空间(new)
+					std::uninitialized_fill_n(start._B_Cur - (pos - start._B_Cur), count - (pos - start._B_Cur), value);
+
+					// 1.1.2.3 copy assignment count的剩余部分(new)
+					std::fill(pos - (pos - start._B_Cur), pos, value);
+
+				}
+				start -= count;
+				return pos - count;
+			}
+			// 1.2 start所在的buffer前面的空位不够
+			else {
+				// 1.2.1 这个buffer是map的第一buffer
+				if (start._B_Node == map) {
+					// TODO
+					// 如果_Map_Growth()一次后的空间都不够呢？
+				}
+				// 1.2.2 不是第一个buffer
+				else {
+					// TODO
+					// 如果一次_New_Buffer()后不够呢？
+				}
+			}
+		}
+		// 2. pos 更靠近 finish
+		else {
+
+		}
+	}
+
+	template<class T, class Allocator>
 	typename deque<T, Allocator>::iterator deque<T, Allocator>::insert(iterator pos, const_reference value) {
 		if (pos._B_Cur == start._B_Cur) {
 			push_front(value);
@@ -446,15 +506,73 @@ namespace Miku {
 	}
 
 	template<class T, class Allocator>
-	void deque<T, Allocator>::insert(iterator pos, size_type count, const_reference value) {
+	void deque<T, Allocator>::_Insert_Start_Aux(size_type count, const_reference value) {
+		*(start._B_Node - 1) = _New_Buffer();
+		start -= count;
+		std::uninitialized_fill_n(start, count, value);
+	}
 
+	template<class T, class Allocator>
+	void deque<T, Allocator>::_Insert_Finish_Aux(size_type count, const_reference value) {
+		*(finish._B_Node + 1) = _New_Buffer();
+		std::uninitialized_fill_n(finish, count, value);
+		finish += count;
+	}
+
+	template<class T, class Allocator>
+	void deque<T, Allocator>::insert(iterator pos, size_type count, const_reference value) {
+		// 1. 特判：插入位置在begin()
+		if (pos._B_Cur == start._B_Cur) {
+			// 1.1. 如果start所在buffer前面的空位数不少于count
+			if (start._B_Cur - start._B_First >= count) {
+				start -= count;
+				std::uninitialized_fill_n(start, count, value);
+			}
+			// 1.2. 如果start所在的buffer前面的空位不够
+			else {
+				// 1.2.1. 如果这个buffer还是map中的第一个buffer
+				if (start._B_Node == map) {
+					_Map_Growth();
+
+					_Insert_Start_Aux(count, value);
+				}
+				// 1.2.2. 不是第一个buffer
+				else {
+					_Insert_Start_Aux(count, value);
+				}
+			}
+		}
+		// 2. 特判：插入位置在end()
+		else if (pos._B_Cur == finish._B_Cur) {
+			// 2.1. 如果finish所在的buffer后面的空位数不少于count
+			if (finish._B_Last - finish._B_Cur >= count) {
+				std::uninitialized_fill_n(finish, count, value);
+				finish += count;
+			}
+			// 2.2 如果finish所在的buffer后面的空位不够
+			else {
+				// 2.2.1 最后一个buffer
+				if (finish._B_Node == map + mapSize - 1) {
+					_Map_Growth();
+					
+					_Insert_Finish_Aux(count, value);
+				}
+				// 2.2.2 不是最后一个buffer
+				else {
+					_Insert_Finish_Aux(count, value);
+				}
+			}
+		}
+		// 3. 在begin()和end()之间
+		else
+			return Insert_Aux(pos, count, value);
 	}
 
 	template<class T, class Allocator>
 	template<class InputIt>
 	void deque<T, Allocator>::insert(iterator pos, InputIt first, InputIt last,
 		typename std::enable_if<!std::is_integral<InputIt>::value>::type*) {
-
+		
 	}
 
 	template<class T, class Allocator>
