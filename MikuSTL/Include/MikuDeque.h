@@ -200,12 +200,19 @@ namespace Miku {
 
 		void _Map_Growth();
 
-		void _Insert_Start_Aux(size_type, const_reference);
+		void _Insert_Start_Aux(size_type, const_reference, size_type);
+		template<class InputIt>
+		void _Insert_Start_Aux(InputIt, InputIt, size_type);
 
-		void _Insert_Finish_Aux(size_type, const_reference);
+
+		void _Insert_Finish_Aux(size_type, const_reference, size_type);
+		template<class InputIt>
+		void _Insert_Finish_Aux(InputIt, InputIt, size_type);
 
 		iterator Insert_Aux(iterator, const_reference);
 		iterator Insert_Aux(iterator, size_type, const_reference);
+		template<class InputIt>
+		iterator Insert_Aux(iterator, InputIt, InputIt);
 
 		// 每个deque中最少的buffer数
 		static size_type _Min_Buffer_Count() { return 4; }
@@ -247,15 +254,41 @@ namespace Miku {
 		void pop_back();
 
 		iterator insert(iterator, const_reference);
-		void insert(iterator, size_type, const_reference);
+		iterator insert(iterator, size_type, const_reference);
 		template<class InputIt>
-		void insert(iterator, InputIt, InputIt,
+		iterator insert(iterator, InputIt, InputIt,
 			typename std::enable_if<!std::is_integral<InputIt>::value>::type* = nullptr);
-		iterator insert(const_iterator, std::initializer_list<value_type>);
+		iterator insert(iterator, std::initializer_list<value_type>);
+
+		iterator erase(iterator);
+		iterator erase(iterator, iterator);
+
+		void swap(deque&) noexcept;
 
 		void clear() noexcept;
 
 	};
+
+
+	// 这个两个重载以后放到一个algorithm里，每个容器好像都差不多呢
+	template<class T, class Allocator>
+	bool operator==(deque<T, Allocator>& lhs, deque<T, Allocator>& rhs) {
+		if (lhs.size() != rhs.size())
+			return false;
+		auto l_beg = lhs.begin();
+		auto r_beg = rhs.begin();
+		auto l_end = lhs.end();
+		for (; l_beg != l_end; ++l_beg, ++r_beg) {
+			if (*l_beg != *r_beg)
+				return false;
+		}
+		return true;
+	}
+
+	template<class T, class Allocator>
+	bool operator!=(deque<T, Allocator>& lhs, deque<T, Allocator>& rhs) {
+		return (!(lhs == rhs));
+	}
 }
 
 #include "MikuDeque.impl.h"

@@ -30,8 +30,8 @@
 
 
 #### 进度备忘
-* deque让我意识到我是个傻逼
-* 溜了溜了，写红黑树了
+* deque写完了，性能测试抽象一下吧
+* 然后rb-tree
 
 #### 挖的坑
 * 自己的Iterator_Traits目前废了，在用std的
@@ -41,4 +41,6 @@
 * 用SFINAE实现的区分重载函数写的有点不优雅（TODO写在MikuList.h了）？
 * 测试数据有点弱（能跑就行...(掀桌 ︵┻━┻
 * list内存泄漏了？
-* deque的特判情况太多啦，我设计的问题？？
+* <del>deque的特判情况太多啦，我设计的问题？？<del>
+* deque的insert效率有点低，会先copy ctor，然后立刻copy assignment覆盖
+    * 这么做是因为真的好写多了（不然真的太多特判了。。

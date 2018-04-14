@@ -108,7 +108,7 @@ void dequeTestCase6() {
 void dequeTestCase7() {
 	Miku::deque<int> _deq_1;
 	
-	// 好像也没法子显示测试，下面这个几句话可以打断点，看内存数据变化
+	// 好像也没法子显式测试，下面这个几句话可以打断点，看内存数据变化
 	// 之所以127， 129这些是因为int会导致buffer长度为128
 
 	// 目前的设计，这里push_front() 会申请一个buffer
@@ -165,16 +165,99 @@ void dequeTestCase9() {
 }
 
 void dequeTestCase10() {
+	Miku::deque<int> _deq_1{ 1,2,3,4,5,6 };
+
+	auto _iter_1 = _deq_1.insert(_deq_1.begin() + 2, 100);
+	auto _iter_2 = _deq_1.insert(_deq_1.end() - 2, 200);
+
+	assert(*(_deq_1.begin() + 2) == 100);
+	assert(*(_deq_1.end() - 3) == 200);
+
+	assert(*_iter_1 == 100);
+	assert(*_iter_2 == 200);
 
 }
 
 void dequeTestCase11() {
+	Miku::deque<int> _deq_1{ 1,2,3,4,5,6 };
+	_deq_1.insert(_deq_1.begin(), 3, -1);
+	assert(*_deq_1.begin() == -1);
+	assert(_deq_1.size() == 9);
 
+	_deq_1.insert(_deq_1.end(), 200, -1);
+	assert(_deq_1.size() == 209);
 }
 
 void dequeTestCase12() {
+	Miku::deque<int> _deq_1{ 1,2,3,4,5,6 };
+	_deq_1.insert(_deq_1.begin() + 1, 3, -1);
+	assert(_deq_1.size() == 9);
+
+	_deq_1.insert(_deq_1.end() - 1, 3, -2);
+	assert(_deq_1.size() == 12);
+
+	// 测试insert的 start._B_Node == map 并且 剩余空间不够 的情况
+	_deq_1.insert(_deq_1.begin(), 200, 3);
+	assert(_deq_1.size() == 212);
 
 }
 
+void dequeTestCase13() {
+	// 测试insert的count大于一个buffer的情况
+	Miku::deque<int> _deq_1{ 1,2,3,4,5,6 };
+	_deq_1.insert(_deq_1.begin(), 200, -1);
+	assert(_deq_1.size() == 206);
+
+	Miku::deque<int> _deq_2{ 1,2,3,4,5,6 };
+	_deq_2.insert(_deq_2.end(), 200, -1);
+	assert(_deq_2.size() == 206);
+}
+
+void dequeTestCase14() {
+	Miku::deque<int> _deq_1{ 1,2,3,4,5,6 };
+	Miku::deque<int> _deq_2{ -1,-2,-3,-4,-5,-6 };
+
+	_deq_1.insert(_deq_1.begin(), _deq_2.begin(), _deq_2.end());
+
+	assert(_deq_1.size() == 12);
+
+	_deq_2.insert(_deq_2.begin() + 1, { 1,2,3,4,5 });
+	
+	assert(_deq_2.size() == 11);
+}
+
+void dequeTestCase15() {
+	Miku::deque<int> _deq_1{ 1,2,3 };
+	Miku::deque<int> _deq_2{ 0,1,2,3 };
+
+	assert(_deq_1 != _deq_2);
+	_deq_1.push_front(0);
+	assert(_deq_1 == _deq_2);
+}
+
+void dequeTestCase16() {
+	Miku::deque<int> _deq_1{ 1,2,3,4 };
+	auto _iter_1 = _deq_1.begin() + 1;
+	auto _iter_2 = _deq_1.end() - 1;
+	_deq_1.erase(_iter_1, _iter_2);
+	
+	Miku::deque<int> _deq_2{ 1,4 };
+	assert(_deq_1 == _deq_2);
+}
+
+void dequeTestCase17() {
+	Miku::deque<int> _deq_1{ 1,2,3 };
+	auto _iter_1 = _deq_1.begin() + 1;
+
+	Miku::deque<int> _deq_2{ -1,-2,-3,-4 };
+	auto _iter_2 = _deq_2.begin() + 1;
+
+	_deq_1.swap(_deq_2);
+
+	assert(_deq_1.size() == 4);
+	assert(_deq_2.size() == 3);
+	assert(*_iter_1 == 2);
+	assert(*_iter_2 == -2);
+}
 
 #endif // !TEST_DEQUE_H__
