@@ -12,8 +12,11 @@
 //#include "Test/testVector.hpp"
 //#include "Test/testHeader.hpp"
 
+#include "Test/TestPerformance.hpp"
+
 #include "Test/TestListPerformance.hpp"
 #include "Test/TestVectorPerformance.hpp"
+#include "Test/TestDequePerformance.hpp"
 
 void testAlloc() {
 	allocTestCase1();
@@ -94,12 +97,12 @@ void basic_test() {
 void performance_test() {
 	// list_test();
 	// vector_test();
-
+	deque_test();
 }
 
 int main(int argc, char* argv[]) {
 
-	basic_test();
-	// performance_test();
+	// basic_test();
+	performance_test();
 	return 0;
 }

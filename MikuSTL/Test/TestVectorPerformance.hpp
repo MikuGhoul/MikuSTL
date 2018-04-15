@@ -1,55 +1,57 @@
 #include "../Include/MikuVector.h"
-#include <ctime>
 #include <vector>
-#include <random>
 
 void vector_test() {
 
 	std::srand(std::time(nullptr));
 
 	// Miku
+	std::cout << "Miku::vector<int>" << std::endl;
+	
 	Miku::vector<int> miku_vec_1;
-	std::clock_t miku_start_time_1 = std::clock();
+	TestPer::start();
 	for (int i = 0; i != 100000; ++i)
 		miku_vec_1.push_back(rand());
-	std::clock_t miku_end_time_1 = std::clock();
-	std::cout << "push_back: " << miku_end_time_1 - miku_start_time_1 << std::endl;
+	TestPer::finish();
+	std::cout << "\tpuck_back -> 100000 times: " << TestPer::spend() << std::endl;
 
 	Miku::vector<int> miku_vec_2;
-	std::clock_t miku_start_time_2 = std::clock();
+	TestPer::start();
 	for (int i = 0; i != 1000000; ++i)
 		miku_vec_2.push_back(rand());
-	std::clock_t miku_end_time_2 = std::clock();
-	std::cout << "push_back: " << miku_end_time_2 - miku_start_time_2 << std::endl;
+	TestPer::finish();
+	std::cout << "\tpuck_back -> 1000000 times: " << TestPer::spend() << std::endl;
 
 	Miku::vector<int> miku_vec_3;
-	std::clock_t miku_start_time_3 = std::clock();
+	TestPer::start();
 	for (int i = 0; i != 10000000; ++i)
 		miku_vec_3.push_back(rand());
-	std::clock_t miku_end_time_3 = std::clock();
-	std::cout << "push_back: " << miku_end_time_3 - miku_start_time_3 << std::endl;
+	TestPer::finish();
+	std::cout << "\tpuck_back -> 10000000 times: " << TestPer::spend() << std::endl;
 
 
 	// std
+	std::cout << "std::vector<int>" << std::endl;
+
 	std::vector<int> std_vec_1;
-	std::clock_t std_start_time_1 = std::clock();
+	TestPer::start();
 	for (int i = 0; i != 100000; ++i)
 		std_vec_1.push_back(rand());
-	std::clock_t std_end_time_1 = std::clock();
-	std::cout << "push_back: " << std_end_time_1 - std_start_time_1 << std::endl;
+	TestPer::finish();
+	std::cout << "\tpuck_back -> 100000 times: " << TestPer::spend() << std::endl;
 
 	std::vector<int> std_vec_2;
-	std::clock_t std_start_time_2 = std::clock();
+	TestPer::start();
 	for (int i = 0; i != 1000000; ++i)
 		std_vec_2.push_back(rand());
-	std::clock_t std_end_time_2 = std::clock();
-	std::cout << "push_back: " << std_end_time_2 - std_start_time_2 << std::endl;
+	TestPer::finish();
+	std::cout << "\tpuck_back -> 1000000 times: " << TestPer::spend() << std::endl;
 
 	std::vector<int> std_vec_3;
-	std::clock_t std_start_time_3 = std::clock();
+	TestPer::start();
 	for (int i = 0; i != 10000000; ++i)
 		std_vec_3.push_back(rand());
-	std::clock_t std_end_time_3 = std::clock();
-	std::cout << "push_back: " << std_end_time_3 - std_start_time_3 << std::endl;
+	TestPer::finish();
+	std::cout << "\tpuck_back -> 10000000 times: " << TestPer::spend() << std::endl;
 
 }

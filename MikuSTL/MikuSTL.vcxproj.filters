@@ -89,6 +89,12 @@
     <ClInclude Include="Test\testDeque.hpp">
       <Filter>Test</Filter>
     </ClInclude>
+    <ClInclude Include="Test\TestPerformance.hpp">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\TestDequePerformance.hpp">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
