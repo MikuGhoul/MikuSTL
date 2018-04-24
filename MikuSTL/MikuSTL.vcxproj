@@ -153,6 +153,8 @@
     <ClInclude Include="Include\MikuDeque.impl.h" />
     <ClInclude Include="Include\MikuIterator.h" />
     <ClInclude Include="Include\MikuList.h" />
+    <ClInclude Include="Include\MikuRB_Tree.h" />
+    <ClInclude Include="Include\MikuRB_Tree.impl.h" />
     <ClInclude Include="Include\MikuString.h" />
     <ClInclude Include="Test\testAlloc.hpp" />
     <ClInclude Include="Test\testArray.hpp" />
