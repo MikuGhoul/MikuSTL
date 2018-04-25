@@ -8,6 +8,7 @@
 #include "Test/testVector.hpp"
 #include "Test/testArray.hpp"
 #include "Test/testDeque.hpp"
+#include "Test/testRB_Tree.hpp"
 //#include "Test/testString.hpp"
 //#include "Test/testVector.hpp"
 //#include "Test/testHeader.hpp"
@@ -86,23 +87,33 @@ void testDeque() {
 	dequeTestCase17();
 }
 
+void testRbTree() {
+	rbtreeTestCase1();
+	rbtreeTestCase2();
+	rbtreeTestCase3();
+	rbtreeTestCase4();
+	rbtreeTestCase5();
+	rbtreeTestCase6();
+}
+
 void basic_test() {
 	testAlloc();
 	testList();
 	testVector();
 	testArray();
 	testDeque();
+	testRbTree();
 }
 
 void performance_test() {
 	// list_test();
 	// vector_test();
-	deque_test();
+	// deque_test();
 }
 
 int main(int argc, char* argv[]) {
 
-	// basic_test();
-	performance_test();
+	basic_test();
+	// performance_test();
 	return 0;
 }

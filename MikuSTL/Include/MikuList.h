@@ -160,7 +160,7 @@ namespace Miku {
 	public:
 		using value_type = T;
 		using allocator_type = Allocator;
-		using size_type = std::size_t;
+		using size_type = typename std::size_t;
 		using difference_type = typename std::ptrdiff_t;
 		using reference =  value_type&;
 		using const_reference =  const value_type&;

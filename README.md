@@ -47,8 +47,7 @@
     1000万      | 1809ms        | 11764ms
 
 #### 进度备忘
-* deque写完了，性能测试抽象一下吧
-* 然后rb-tree
+* rb-tree的base iterator 和 iterator的重载时候怎么转型
 
 #### 挖的坑
 * 自己的Iterator_Traits目前废了，在用std的
@@ -62,3 +61,5 @@
 * deque的insert效率有点低，会先copy ctor，然后立刻copy assignment覆盖
     * 这么做是因为真的好写多了（不然真的太多特判了。。
 * 重构性能测试的时候发现，我vector的push_back时间增加了**1/2**左右!!!，因为之前是用手写的赋值，现在改成了std::copy, std::fill啥的了。。多了几百万个函数调用，该怎么权衡？
+* 看一些stl的实现里，有的迭代器用双层结构，我这有的container没有这样设计
+    * [stl中一些迭代器为什么要采用双层结构呢？](https://www.zhihu.com/question/28680184)
