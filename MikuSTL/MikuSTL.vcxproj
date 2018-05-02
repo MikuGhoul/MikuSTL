@@ -164,6 +164,7 @@
     <ClInclude Include="Test\testList.hpp" />
     <ClInclude Include="Test\TestListPerformance.hpp" />
     <ClInclude Include="Test\TestPerformance.hpp" />
+    <ClInclude Include="Test\testRB_Tree.hpp" />
     <ClInclude Include="Test\testString.hpp" />
     <ClInclude Include="Test\testVector.hpp" />
     <ClInclude Include="Include\MikuVector.h" />

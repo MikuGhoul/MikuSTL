@@ -24,6 +24,16 @@ namespace Miku {
 			_Base_Ptr left;
 			_Base_Ptr right;
 
+			static _Base_Ptr _Minmum(_Base_Ptr _x) noexcept {
+				while (_x->left) _x = _x->left;
+				return _x;
+			}
+
+			static _Base_Ptr _Maxmum(_Base_Ptr _x) noexcept {
+				while (_x->right) _x = _x->right;
+				return _x;
+			}
+
 		};
 
 		template<class Value>
@@ -59,7 +69,9 @@ namespace Miku {
 
 		public:
 			_RB_Tree_Iterator() = default;
-			_RB_Tree_Iterator(link_type)
+			_RB_Tree_Iterator(_Base_Ptr _x) {
+				node = _x;
+			}
 
 		public:
 			self operator++(int);
@@ -97,6 +109,8 @@ namespace Miku {
 		using pointer = value_type * ;
 
 		using rb_tree_node = typename Internal::_RB_Tree_Node<Value>;
+		/*using rb_tree_node_base = typename Internal::_RB_Tree_Node_Base;
+		using base_link_type = rb_tree_node_base * ;*/
 		using link_type = rb_tree_node * ;
 		using color = typename Internal::_Node_Color;
 
@@ -110,12 +124,24 @@ namespace Miku {
 		Compare key_compare;
 
 	public:
-		RB_Tree(Compare& = Compare());
+		RB_Tree(Compare = Compare());
 		RB_Tree(const RB_Tree&);
 		// ~RB_Tree();
 
 	private:
 		link_type _New_Node();
+		link_type _New_Node(reference);
+
+		link_type& _Root() { return header->parent; }
+		link_type& _Left_Most() { return header->left; }
+		link_type& _Right_Most() { return header->right; }
+
+		reference _Value(link_type _v) { return _v->value_field; }
+		const key_type _Key(link_type _v) { return KeyOfValue()(_Value(_v)); }
+
+		void _RB_Tree_Rotate_Left(link_type);
+		void _RB_Tree_Rotate_Right(link_type);
+		void _RB_Tree_Rebalance(link_type);
 
 	public:
 		iterator begin() noexcept { return header->left; }
@@ -126,6 +152,11 @@ namespace Miku {
 
 		size_type size() noexcept { return node_count; }
 
+		iterator insert(link_type, link_type, const value_type&);
+
+		iterator insert_euqal(const value_type&);
+
+		iterator insert_unique(const value_type&);
 	};
 
 }

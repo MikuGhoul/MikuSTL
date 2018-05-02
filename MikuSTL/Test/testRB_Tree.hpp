@@ -11,8 +11,11 @@ struct _Identity {
 };
 
 void rbtreeTestCase1() {
-	Miku::RB_Tree<int, int, _Identity<int>, std::less<int>> _rb1();
-
+	Miku::RB_Tree<int, int, _Identity<int>, std::less<int>> _rb1;
+	_rb1.begin();
+	_rb1.end();
+	_rb1.empty();
+	_rb1.size();
 }
 
 void rbtreeTestCase2() {

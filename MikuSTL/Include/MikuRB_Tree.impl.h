@@ -77,20 +77,28 @@ namespace Miku{
 	}
 
 	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
-	typename RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::link_type
+	inline typename RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::link_type
 		RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::_New_Node() {
 		return allocator_type::allocate();
 	}
 
 	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
-	RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::RB_Tree(Compare& comp)
+	inline typename RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::link_type
+		RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::_New_Node(reference value) {
+		link_type p = allocator_type::allocate();
+		Miku::allocator<Value>::construct(&p->value_field, value);
+		return p;
+	}
+
+	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
+	RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::RB_Tree(Compare comp)
 		: node_count(0), key_compare(comp) {
 		header = _New_Node();
 
 		header->node_color = color::Red;
-		header->parent = nullptr;
-		header->left = header;
-		header->right = header;
+		_Root() = nullptr;
+		_Left_Most() = header;
+		_Right_Most() = header;
 
 	}
 
@@ -102,6 +110,80 @@ namespace Miku{
 		header->node_color = color::Red;
 		// TODO
 		// 这个ctor会用到吗？？
+
+	}
+
+	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
+	void Miku::RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::_RB_Tree_Rotate_Left(link_type _x) {
+
+	}
+
+	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
+	void Miku::RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::_RB_Tree_Rotate_Right(link_type _x) {
+
+	}
+
+	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
+	void Miku::RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::_RB_Tree_Rebalance(link_type _x) {
+		
+	}
+
+	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
+	typename RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::iterator
+		RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::insert(link_type _x, link_type _y, const value_type& value) {
+
+		link_type _z = _New_Node(value);
+		// (_y为header) || (插入值 小于 其父节点值)
+		if (_y == header || key_compare(KeyOfValue()(value), _Key(_y))) {
+
+			_y->left = _z;
+
+			if (_y == header)
+				_Root() = _Left_Most() = _Right_Most() = _z;
+			else if (_y == _Left_Most())
+				_Left_Most() = _z;
+		}
+		// 
+		else {
+
+			_y->right = _z;
+
+			if (_y == _Right_Most())
+				_Right_Most() == _z;
+		}
+
+		_z->parent = _y;
+		_z->left = _z->right = nullptr;
+		// 红黑树性质，插入的新节点必为红色
+		_z->node_color = color::Red;
+		++node_count;
+
+		_RB_Tree_Rebalance(_z);
+		return _z;
+	}
+
+	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
+	typename RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::iterator
+		RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::insert_euqal(const value_type& value) {
+		
+	}
+
+	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
+	typename RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::iterator
+		RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::insert_unique(const value_type& value) {
+		link_type _y = header;
+		link_type _x = _Root();
+
+		// 寻找到合适的插入位置
+		while (_x) {
+			_y = _x;
+			// key_compare 用作比较大小，两个参数是提取出来的key
+			_x = key_compare(KeyOfValue()(value), _Key(_x)) ?
+				_x->left : _x->right;
+		}
+
+		// _y 为安插节点的父节点，_x 为插入节点的位置
+		return insert(_x, _y, value);
 
 	}
 }

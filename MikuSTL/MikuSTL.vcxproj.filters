@@ -101,6 +101,9 @@
     <ClInclude Include="Include\MikuRB_Tree.impl.h">
       <Filter>Implement</Filter>
     </ClInclude>
+    <ClInclude Include="Test\testRB_Tree.hpp">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
