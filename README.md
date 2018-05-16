@@ -47,8 +47,8 @@
     1000万      | 1809ms        | 11764ms
 
 #### 进度备忘
-* rb-tree做rebalance，左旋右旋啥的
-* rb-tree的base iterator 和 iterator的重载时候怎么转型
+* rb-tree的insert_euqal
+* rb-tree的insert_unique的测试
 
 #### 挖的坑
 * 自己的Iterator_Traits目前废了，在用std的

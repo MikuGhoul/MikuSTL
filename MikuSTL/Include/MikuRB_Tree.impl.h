@@ -115,17 +115,112 @@ namespace Miku{
 
 	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
 	void Miku::RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::_RB_Tree_Rotate_Left(link_type _x) {
+		link_type _y = _x->right;
+		_x->right = _y->left;
 
+		if (_y->left)
+			_y->left->parent = _x;
+
+		_y->parent = _x->parent;
+		// TODO
+		// _x == _Root()这里是否需要对header的parent有操作？
+		if (_x == _Root())
+			_Root() = _y;
+		else if (_x == _x->parent->left)
+			_x->parent->left = _y;
+		else
+			_x->parent->right = _y;
+
+		_y->left = _x;
+		_x->parent = _y;
 	}
 
 	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
 	void Miku::RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::_RB_Tree_Rotate_Right(link_type _x) {
+		link_type _y = _x->left;
+		_x->left = _y->right;
 
+		if (_y->right)
+			_y->right->parent = _x;
+
+		_y->parent = _x->parent;
+		// TODO
+		// 同 _RB_Tree_Rotate_Left
+		if (_x == _Root())
+			_Root() = _y;
+		else if (_x == _x->parent->right)
+			_x->parent->right = _y;
+		else
+			_x->parent->left = _y;
+
+		_y->right = _x;
+		_x->parent = _y;
 	}
 
 	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
 	void Miku::RB_Tree<Key, Value, KeyOfValue, Compare, Allocator>::_RB_Tree_Rebalance(link_type _x) {
-		
+		/* 
+		红黑树性质：
+			1. 节点是红色或黑色。
+			2. 根是黑色。
+			3. 所有叶子都是黑色（叶子是NIL节点）。
+			4. 每个红色节点必须有两个黑色的子节点。（从每个叶子到根的所有路径上不能有两个连续的红色节点。）
+			5. 从任一节点到其每个叶子的所有简单路径都包含相同数目的黑色节点。
+		*/
+
+		// 非根节点 并且 父节点的颜色为红色时
+		// 因为新插入的节点的颜色必为红色，所以违反性质5
+		while (_x != _Root() && _x->parent->node_color == color::Red) {
+			// 1. 插入节点x的父节点是x的祖父节点的左子节点
+			if (_x->parent == _x->parent->parent->left) {
+				link_type _y = _x->parent->parent->right;
+				// 1.1 插入节点x的叔叔节点为红色
+				if (_y && _y->node_color == color::Red) {
+					// 父节点与叔叔节点变黑，祖父节点变红
+					_x->parent->node_color = color::Black;
+					_y->node_color = color::Black;
+					_y->parent->node_color = color::Red;
+
+					// 通过祖父节点向上递归调整
+					_x = _y->parent;
+				}
+				// 1.2 插入节点x的叔叔节点为黑色，并且x为左子节点，此时可以进行一次右旋，并改变相应颜色
+				// 1.3 插入节点x的叔叔节点为黑色，并且x为右子节点，此时可以进行一次左旋，转化为 1.2
+				else {
+					// 1.3
+					if (_x == _x->parent->right) {
+						_x = _x->parent;
+						_RB_Tree_Rotate_Left(_x);
+					}
+
+					// 1.2
+					_RB_Tree_Rotate_Right(_x->parent->parent);
+					_x->parent->node_color = color::Black;
+					_x->parent->right->node_color = color::Red;
+				}
+			}
+			// 2. 插入节点x的父节点是x的祖父节点的右子节点，与1的操作对称
+			else {
+				link_type _y = _x->parent->parent->left;
+				if (_y && _y->node_color == color::Red) {
+					_x->parent->node_color = color::Black;
+					_y->node_color = color::Black;
+					_y->parent->node_color = color::Red;
+
+					_x = _y->parent;
+				}
+				else {
+					if (_x == _x->parent->left) {
+						_x = _x->parent;
+						_RB_Tree_Rotate_Right(_x);
+					}
+					_RB_Tree_Rotate_Left(_x->parent->parent);
+					_x->parent->node_color = color::Black;
+					_x->parent->left->node_color = color::Red;
+				}
+			}
+
+		}
 	}
 
 	template<class Key, class Value, class KeyOfValue, class Compare, class Allocator>
